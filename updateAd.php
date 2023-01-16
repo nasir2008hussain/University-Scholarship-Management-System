@@ -82,56 +82,43 @@
             margin-left: -2%;
         }
 
-
-
-        /* ----------------------- */
-        .adSch{
-            margin: 15px 0px;
-            height: 25px;
-            font-size: medium;
-        
-            /* justify-content: center; */
-           
-        }
-        .view{
+        /* ------------------------------------- */
+        .lastDate {
             float: right;
-            background-color: #18ca89;
-            border-radius: 5px;
             margin-right: 10px;
-            font-size: medium;
-            padding: 1px 1px;
-            width: 50px;
-            text-align: center;
-        }
-        .view:hover{
-            color: white;
-
-        }
-        /* -------------------- */
-        label{
-            /* display: inline-block; */
-            width: 170px;
-            font-size: x-large;
-        }
-        #search{
-            height: 35px;
-            width: 300px;
-            border-radius: 5px;
-            margin: 0px 15px;
-        }
-        #searchBtn{
-            height: 35px;
-            width: 100px;
-            border-radius: 5px;
             background-color: #18ca89;
-            font-size: medium;
+            border: 0.5px solid black;
+            border-radius: 3px;
+            padding: 2px 2px;
+            width: 80px;
         }
-        #searchBtn:hover{
+        .lastDate:hover{
             cursor: pointer;
             color: white;
+            
         }
+        #d1{
+            background-color: white;
+            width: 160px;
+            padding: 1px 1px;
+        }
+        #d1:hover{
+            cursor: pointer;
+            color: black;
+            
+        }
+        .adList{
+            height: 25px;
+            align-items: center;
+        }
+        /* ------------------- */
+        .schName{
+            color: black;
+            border: 1px solid #18ca89;
+            width: 50%;
 
-
+        }
+      
 
     </style>
 </head>
@@ -166,35 +153,48 @@
             <ul>
                 <li class="appmenu"><a href="adminHome.php">Home</a></li>
                 <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
-                <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
+                <li class="appmenu"><a class="active" href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
                 <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
-                <li class="appmenu"><a class="active" href="stdRecord.html">View Student Record</a></li>
+                <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
                 <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
 
-            <center>
-                <h3 class="headingsAdmin">Search Students Record</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id quibusdam quae porro facilis necessitatibus neque odio consectetur voluptas! Aliquid fuga id distinctio architecto iure corrupti accusantium sapiente, possimus impedit nemo.</p>
-                <label for="search" id="sLable">Search Student</label>
-                <input type="number" name="search" id="search" placeholder="search by RegistrationNo" autocomplete="off">
-                <button value="search" id="searchBtn">Search</button>
+            <h3 class="headingsAdmin">Advertised Scholarhsip</h3>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum ab quas illum odio qui repellat,
+                consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum
+                nulla obcaecati
+            </p>
 
-            </center>
+                <ol type="1">
+                    <?php
+                    include("facadeClass.php");
+                    $db = new DBFacade();
+                    $row=$db->getadScholarsipInfo();
+                    $count = sizeof($row);
+                    $i = 0;
+                    ?>
+                    <?php for ($i=0;$i<$count;$i++) { ?>
+                        <li class="adLit">
+                        <form action="updateSchPHP.php" method="post">
+                        <input class="schName" readonly value="<?php echo($row[$i]); $i++;?>" name="schName">
+                        <button class="lastDate" name="updateAdBtn" >SAVE</button> 
+                         <input value="<?php echo($row[$i]); ?>" min="<?php echo($row[$i]); ?>" name="lastDate"  type="date" class="lastDate" id="d1" onchange="enableSubmit()">
+                        </form>
+                    <?php }  ?>
+                        </li>
+                    <!-- <li class="adList"> <a>Ehsaas Undergraduate Scholarship</a>
+                        <button value="submit" class="lastDate" onclick="disableDate()">SAVE</button>
+                        <input type="button" name="ext" id="ext1" value="EXTEND" class="lastDate" onclick="extend()">
+                        <input type="date" disabled="disabled" class="lastDate" id="d1">
+                    </li> -->
+
+                </ol>
         </div>
-
-    </div>
-
-
-
-
-
-
-
-
 </body>
 
 </html>

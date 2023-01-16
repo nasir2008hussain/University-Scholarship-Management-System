@@ -46,7 +46,7 @@
             padding: 10px 10px;
             font-size: larger;
         }
-
+        
 
         .menuAdmin {
             border-bottom: 1px solid black;
@@ -57,82 +57,49 @@
 
 
         }
-
-        .active {
+        .active{
             background-color: #18ca89;
-
+    
         }
-
-
+       
+      
 
         /* -------------------------------------------- */
-        .headingsAdmin {
+        .headingsAdmin{
             background-color: #18ca89;
             width: 100%;
             color: white;
             padding: 6px 6px;
-
+        
         }
-
-        .currSch {
+        .currSch{
             padding: 2px 2px;
         }
-
-        .menu {
+        .menu{
             margin-left: -2%;
         }
 
 
 
         /* ----------------------- */
-        .adSch{
-            margin: 15px 0px;
-            height: 25px;
-            font-size: medium;
-        
-            /* justify-content: center; */
-           
+
+        .boxes{
+            border: 0.5px solid #18ca89;
+            padding: 3px 3px;
+            margin: 8px 3px;
         }
-        .view{
+        /* ----------------- */
+        #resume{
             float: right;
+            border: 1px solid black;
             background-color: #18ca89;
-            border-radius: 5px;
-            margin-right: 10px;
-            font-size: medium;
+            color: white;
             padding: 1px 1px;
-            width: 50px;
+            margin-right: 5px;
+            border-radius: 5px;
+            width: 90px;
             text-align: center;
         }
-        .view:hover{
-            color: white;
-
-        }
-        /* -------------------- */
-        label{
-            /* display: inline-block; */
-            width: 170px;
-            font-size: x-large;
-        }
-        #search{
-            height: 35px;
-            width: 300px;
-            border-radius: 5px;
-            margin: 0px 15px;
-        }
-        #searchBtn{
-            height: 35px;
-            width: 100px;
-            border-radius: 5px;
-            background-color: #18ca89;
-            font-size: medium;
-        }
-        #searchBtn:hover{
-            cursor: pointer;
-            color: white;
-        }
-
-
-
     </style>
 </head>
 
@@ -148,7 +115,7 @@
                 repellendus</p>
         </div>
         <div class="log">
-            <a id="login" href="Login.php">Logout</a>
+            <a id="login" href="index.php">Logout</a>
         </div>
     </div>
 
@@ -160,35 +127,81 @@
             facilis quae dolor repudiandae perspiciatis incidunt itaque earum? Dolore hic labore id necessitatibus.</p>
     </center>
 
+    
 
     <div class="appbody">
         <div class="menu">
             <ul>
-                <li class="appmenu"><a href="adminHome.php">Home</a></li>
+                <li class="appmenu"><a class="active" href="adminHome.php">Home</a></li>
                 <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
                 <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
-                <li class="appmenu"><a class="active" href="stdRecord.html">View Student Record</a></li>
+                <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
                 <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
+            <h3 class="headingsAdmin">Advertised Scholarhsip</h3>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum ab quas illum odio qui repellat, consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum nulla obcaecati 
+            </p>
+            <ol>
+                <?php
+                include("facadeClass.php");
+                  $db = new DBFacade();
+                  $row=$db->getadScholarsipInfo();
+                  $count = sizeof($row);
+                  $i = 0;
+                  ?>
+                  <?php for ($i=0;$i<$count;$i++) { ?>
+                    <li class="adSch"><a><?php echo($row[$i]); $i++;?></a></li>
+                   <div class="boxes">
+                    <p class="box1">
+                        <label for="total">Number of Student Applied</label>
+                        <input type="number" name="applied" id="applied" readonly>
+                        <label for="date">Last Date</label>
+                        <input type="date" name="lastDate" value="<?php echo($row[$i]); ?>" id="lastdate" readonly>
+                    </p>
+                </div>
+               
+                  <?php }  ?>
 
-            <center>
-                <h3 class="headingsAdmin">Search Students Record</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id quibusdam quae porro facilis necessitatibus neque odio consectetur voluptas! Aliquid fuga id distinctio architecto iure corrupti accusantium sapiente, possimus impedit nemo.</p>
-                <label for="search" id="sLable">Search Student</label>
-                <input type="number" name="search" id="search" placeholder="search by RegistrationNo" autocomplete="off">
-                <button value="search" id="searchBtn">Search</button>
-
-            </center>
+                
+                <!-- <li class="adSch">Ehsaas Undergraduate Scholarhsip</li>
+                <div class="boxes">
+                    <p class="box1">
+                        <label for="total">Number of Student Applied</label>
+                        <input type="number" name="applied" id="applied" disabled>
+                        <label for="date">Last Date</label>
+                        <input type="date" name="lastDate" id="lastdate" disabled>
+                    </p>
+                </div>
+                <li class="adSch">PM Undergraduate Scholarhsip</li>
+                    <div class="boxes">
+                        <p class="box1">
+                            <label for="total">Number of Student Applied</label>
+                            <input type="number" name="applied" id="applied" disabled>
+                            <label for="date">Last Date</label>
+                            <input type="date" name="lastDate" id="lastdate" disabled>
+                        </p>
+                    </div>
+                <li class="adSch">GB Govt Undergraduate Scholarhsip</li>
+                    <div class="boxes">
+                        <p class="box1">
+                            <label for="total">Number of Student Applied</label>
+                            <input type="number" name="applied" id="applied" disabled>
+                            <label for="date">Last Date</label>
+                            <input type="date" name="lastDate" id="lastdate" disabled>
+                        </p>
+                    </div> -->
+            </ol>
         </div>
 
     </div>
 
-
+        
 
 
 

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +11,7 @@
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="menustyle.css">
     <link rel="stylesheet" href="footbutton.css">
+
     <title>Scholarhsip Management System</title>
     <style>
         /* ------------------------------- */
@@ -146,7 +150,7 @@
     </style>
 </head>
 
-<body>
+<body onload="myFunction()">
     <div class="myhead">
         <div id="logo">
             <img id="qaulogo" src="qau.jpg" alt="loading....">
@@ -178,7 +182,7 @@
                 <li class="appmenu"><a class="active" href="createNew.html">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
-                <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
+                <li class="appmenu"><a href="shortlist.html">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
                 <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
                 <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
@@ -191,103 +195,81 @@
                 consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum
                 nulla obcaecati
             </p>
-            <form action="scholarshipClass.php" method="post" onSubmit="return validate();">
+            <form action="updateSchPHP.php" method="post">
+                <?php
+                $name = $_SESSION["schNameBySearch"];
+                include("facadeClass.php");
+                $db = new DBFacade();
+                $resultArray = $db->searchScholarship($name);
+                ?>
                 <label for="schName" class="allReq">Name of Scholarhsip</label>
-                <input onchange="validate()" type="text" name="schName" id="schId" required>
-
+                <input type="text" name="schName" readonly value="<?php echo("$resultArray[0]");?>" id="schId"
+                required>
                 <label for="schCategory" class="rightside" class="allReq">Category of Scholarship</label>
-                <select name="category" id="schCategory" onchange="showContent()" required>
-                    <option value="" selected="selected" disabled="disabled">Select a Category</option>
-                    <option onchange="showContent()" value="merit">Merit Based Scholarhsip</option>
-                    <option onchange="showContent()" value="need">Need Based Scholarhsip</option>
+                <select name="category" id="schCategory">
+                    <option value="<?php echo($resultArray[1]);?>" selected="selected" readonly>
+                        <?php echo($resultArray[1]);?> base Category
+                    </option>
                 </select>
                 <br>
-                <label for="seat" class="allReq">Total Number of Seat</label>
-                <input type="number" name="seat" id="seat" required min="1" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==5) return false;">
-
+                <label for="seat" class="allReq">Total Number of Seat</label>                
+                <input type="text" readonly value="<?php echo($resultArray[3]);?>"  name="seat" id="seat" required min="1">
                 <label for="lastDateApply" class="rightside" class="allReq">Closing Date</label>
-                <input type="date" name="lastDate" id="lastDateApply" required>
+                <input type="date"   name="lastDate" id="lastDateApply" min="<?php date("Y/m/d") ?>" required>
+                <br>
 
                 <label for="seat" class="allReq">Amount per Students</label>
-                <input type="number" name="stipend" id="seat" required min="1" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==7) return false;">
+                <input type="text" readonly name="stipend" id="seat" required min="1" pattern="/^-?\d+\.?\d*$/"
+                   value="<?php echo($resultArray[2]);?>"  onKeyPress="if(this.value.length==7) return false;">
 
                 <label for="Interview" class="rightside" class="allReq">Publishing Date</label>
-                <input type="date" name="publishDate" readonly  id="publishDate" required>
-                <hr>
+                <input type="date" name="publishDate" id="publishDate" readonly required>
+                <br>
 
+                <hr>
                 <div class="need" id="needDisplay">
                     <h3 class="headingsAdmin">Set Need Based Criteria</h3>
                     <label for="maxIncome" id="incomeLable">Maximum Monthly Income</label>
-                    <input type="number" name="income" id="income" min="1000" pattern="/^-?\d+\.?\d*$/"
-                        onKeyPress="if(this.value.length==7) return false;">
+                    <input type="text" readonly name="income" value=" <?php echo($resultArray[6]);?>"  id="income" min="1000" required>
                     <hr>
                 </div>
 
                 <div class="merit" id="meritDisplay">
                     <h3 class="headingsAdmin">Set Merit Based Criteria</h3>
                     <label for="Inter" class="mLable">Minimum Intermediate Percentage</label>
-                    <input type="number" name="Inter" id="minInter" min="50" max="95" pattern="/^-?\d+\.?\d*$/"
-                        onKeyPress="if(this.value.length==2) return false;">
+                    <input type="text" readonly name="Inter" id="minInter" max="90" value="<?php echo($resultArray[7]);?>">
                     <br>
                     <label for="cgpa" class="mLable">Minimum CGPA</label>
-                    <input type="number" name="minCgpa" id="minCGPA" min="0" step="0.1" max="4" pattern="/^-?\d+\.?\d*$/"
-                        onKeyPress="if(this.value.length==3)  return false;">
+                    <input type="number" readonly name="minCgpa" id="minCGPA" max="4" value="<?php echo($resultArray[6]);?>">
                     <br>
                     <label for="program" class="mLable">Specified Program for Scholarhsip</label>
-                    <select name="Sprogram" id="Sprogram" multiple>
-
-                        <option value="All" selected="selected">For All Program</option>
-                        <option value="BS 4 year">BS 4 year</option>
-                        <option value="MSc">MSc</option>
-                        <option value="MPhil">Mphil</option>
-                        <option value="Ph.D.">Ph.D.</option>
+                    <select name="Sprogram" id="Sprogram">
+                    <option value="<?php echo($resultArray[8]);?>" selected="selected">
+                        <?php echo($resultArray[8]);?>
+                    </option>
+                      
                     </select>
-
                     <label for="program" class="mLable">Specified Department for Scholarhsip</label>
-                    <select name="Sdept" id="Sdept" multiple>
-                        <option value="All" selected="selected">For All Program</option>
-                        <option value="Computer Science">Computer Science</option>
+                    <select name="Sdept" id="Sdept">
+                        <option value="0" selected="selected"><?php echo($resultArray[9]) ?></option>      
                     </select>
                     <br>
                     <label for="semester" class="mLable">Specified Semester for Scholarhsip</label>
-                    <select name="Ssemester" id="Ssemester" multiple>
-
-                        <option value="All" selected="selected">For All Semester</option>
-                        <option value="1">1st Semester</option>
-                        <option value="2">2nd Semester</option>
-                        <option value="3">3rd Semester</option>
-                        <option value="4">4th Semester</option>
-                        <option value="5">5th Semester</option>
-                        <option value="6">6th Semester</option>
-                        <option value="7">7th Semester</option>
-                        <option value="8">8th Semester</option>
-                        <option value="9">9th Semester</option>
-                        <option value="10">10th Semester</option>
+                    <select name="Ssemester" id="Ssemester" readonly>
+                        <option value=" <?php echo($resultArray[11]);?>" selected="selected"> <?php echo($resultArray[11]);?></option>
                     </select>
 
                     <label for="region" class="mLable">Scholarhsip for Any Specified Region</label>
-                    <select name="domicile" id="domicile" multiple>
-                        <option value="All" selected="selected">For overall Pakistan</option>
-                        <option value="GB">Gigit-Baltistan</option>
-                        <option value="AJK">AJK</option>
-                        <option value="KPK">KPK</option>
-                        <option value="Punjab">Punjab</option>
-                        <option value="Balochistan">Balochistan</option>
-                        <option value="FATA">FATA</option>
-                        <option value="ICT">Islamabad Capital Territory</option>
-                        <option value="Sindh Urban">Sindh Urban</option>
-                        <option value="Sindh Rural">Sindh Rural</option>
+                    <select name="docmicile" id="domicile" readonly>
+                        <option value=" <?php echo($resultArray[10]);?>" selected="selected"> <?php echo($resultArray[10]);?></option>
                     </select>
                     <hr>
+                    
                 </div>
                 <center>
                     <div class="next">
-                        <button class="footbutton"
-                            value="submit" name="create">PUBLISH</button>
+                      <button class="footbutton" name="existAdBtn" value="SUBMIT">PUBLISH</button>
                     </div>
-
                 </center>
             </form>
 
@@ -311,100 +293,28 @@
         var maxtoday = (yyyy + 1) + `-` + mm + `-` + dd;
         document.getElementById("lastDateApply").setAttribute("max", maxtoday);
 
-        document.getElementById( "publishDate").value=today;
-       
-       
+        document.getElementById(`publishDate`).value=today;
 
-
-
-        function doesContainNumber(name) {
-            for (i = 0; i < name.length; i++) {
-                if(name[i]==` `){
-                    continue
-                }
-                if (!((name[i] >= 'a' && name[i] <= 'z') || (name[i] >= 'A' && name[i] <= 'Z'))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-
-        function validate() {
-            let name = document.getElementById(`schId`).value
-            if (name.length == 0 || !doesContainNumber(name)) {
-                let errorName = document.getElementById("schId");
-                errorName.style.border = "1px solid red";
-                return false
-            }
-            else {
-                let errorName = document.getElementById("schId");
-                errorName.style.border = "1px solid black";
-                return true
-            }
-        }
-
-        function showContent() {
-            let income = document.getElementById(`income`)
-            let cgpa = document.getElementById(`minCGPA`)
-            let inter = document.getElementById(`minInter`)
-            let show = document.getElementById(`schCategory`).selectedIndex
-            let merit = document.getElementById(`meritDisplay`)
-            let need = document.getElementById(`needDisplay`)
-            let displaySet1 = merit.style.display
-            let displaySet2 = need.style.display
-            if (displaySet1 == `` && displaySet2 == ``) {
-                if (show == 1) {
-                    if (displaySet1 == ``) {
-                        merit.style.display = `block`
-                        if (displaySet2 == `block`) {
-                            need.style.display = `none`
-                        }
-                    }
-                    if (displaySet1 == `block`) {
-                        if (displaySet2 == `block`) {
-                            need.style.display = `none`
-                        }
-                    }
-                }
-
-                else {
-                    if (displaySet2 == ``) {
+  
+            function myFunction() {
+                let a = document.getElementById(`schCategory`).value;
+                if(a=="need"){
+                    let need = document.getElementById(`needDisplay`)
+                    let displaySet2 = need.style.display
+                    if(displaySet2==''){
                         need.style.display = `block`
-                        if (displaySet1 == `block`) {
-                            merit.style.display = `none`
-                        }
                     }
-                    if (displaySet2 == `block`) {
-                        if (displaySet1 == `block`) {
-                            merit.style.display = `none`
-                        }
+                }
+                if(a=="merit"){
+                    let merit = document.getElementById(`meritDisplay`)
+                    let displaySet1 = merit.style.display
+                    if(displaySet1==''){
+                        merit.style.display = `block`
                     }
 
                 }
             }
 
-            if (displaySet1 == `` && displaySet2 == `block`) {
-                merit.style.display = `block`
-                need.style.display = ``
-            }
-            if (displaySet1 == `block` && displaySet2 == ``) {
-                need.style.display = `block`
-                merit.style.display = ``
-            }
-
-            if (merit.style.display == `block`) {
-                inter.setAttribute('required', '');
-                cgpa.setAttribute('required', '');
-                income.removeAttribute(`required`)
-            }
-            
-            if (need.style.display == `block`) {
-                income.setAttribute(`required`, ``);
-                inter.removeAttribute('required');
-                cgpa.removeAttribute('required');
-            }
-        }
 
 
 

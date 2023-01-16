@@ -131,6 +131,19 @@
             color: white;
         }
 
+        /* -------------------- */
+        #archName{
+            padding: 3px 3px;
+            border: 1px solid #18ca89;
+            width: 60%;
+            font-size: medium;
+        }
+        #viewbtn:hover{
+            cursor: pointer;
+            color: white;
+        }
+
+
 
 
     </style>
@@ -167,23 +180,54 @@
                 <li class="appmenu"><a href="adminHome.php">Home</a></li>
                 <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
-                <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
+                <li class="appmenu"><a class="active" href="pubExSch.html">Publish Existing Scholarship</a></li>
                 <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
-                <li class="appmenu"><a class="active" href="stdRecord.html">View Student Record</a></li>
+                <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
                 <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
 
             <center>
-                <h3 class="headingsAdmin">Search Students Record</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id quibusdam quae porro facilis necessitatibus neque odio consectetur voluptas! Aliquid fuga id distinctio architecto iure corrupti accusantium sapiente, possimus impedit nemo.</p>
-                <label for="search" id="sLable">Search Student</label>
-                <input type="number" name="search" id="search" placeholder="search by RegistrationNo" autocomplete="off">
-                <button value="search" id="searchBtn">Search</button>
-
+                <h3 class="headingsAdmin">Search Scholarhsip</h3>
+                <label for="search" id="sLable">Search Scholarhsip</label>
+                <form action="scholarshipClass.php" method="post">
+                    <input type="search" name="search" id="search" placeholder="search by Name">
+                    <button value="submit" id="searchBtn" name="btnSearch">Search</button>
+                </form>
             </center>
+
+            <!-- yourdate_column > DATE_SUB(now(), INTERVAL 6 MONTH) -->
+            
+          
+            <h3 class="headingsAdmin">Recently Archived Scholarhsip</h3>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum ab quas illum odio qui repellat,
+                consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum
+                nulla obcaecati
+            </p>
+            <ol>
+                <?php
+                include("facadeClass.php");
+                $db = new DBFacade();
+                $demand = "onlyName";
+                $archiveArray=$db->getRecentlyArchive($demand);
+                $i = 0;
+                $count = sizeof($archiveArray);
+                if($count==0){
+                    "No recently closed scholarship (3 months) ";
+                }            
+                ?>
+               <?php for ($i=0;$i<$count;$i++) { ?>
+                <form action="scholarshipClass.php" method="post">
+                <li class="adSch"><input id="archName" type="text" name="schName" value="<?php echo($archiveArray[$i]);?>"> 
+                <button id="viewbtn" class="view" value="submit" name="view">VIEW</button></li>
+                </form>
+             
+            <?php }  ?>
+            
+            </ol>
         </div>
 
     </div>

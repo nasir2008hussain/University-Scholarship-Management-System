@@ -168,22 +168,24 @@
                 <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
-                <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
+                <li class="appmenu"><a  class="active" href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
-                <li class="appmenu"><a class="active" href="stdRecord.html">View Student Record</a></li>
+                <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
                 <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
-
-            <center>
-                <h3 class="headingsAdmin">Search Students Record</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id quibusdam quae porro facilis necessitatibus neque odio consectetur voluptas! Aliquid fuga id distinctio architecto iure corrupti accusantium sapiente, possimus impedit nemo.</p>
-                <label for="search" id="sLable">Search Student</label>
-                <input type="number" name="search" id="search" placeholder="search by RegistrationNo" autocomplete="off">
-                <button value="search" id="searchBtn">Search</button>
-
-            </center>
+            <h3 class="headingsAdmin">Recently Archived Scholarhsip</h3>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum ab quas illum odio qui repellat,
+                consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum
+                nulla obcaecati
+            </p>
+            <ol>
+                <li class="adSch">Ehsaas Undergraduate Scholarhsip <a href="#" class="view">VIEW</a></li>
+                <li class="adSch">PM Undergraduate Scholarhsip <a href="#" class="view">VIEW</a></li>
+                <li class="adSch">GB Govt Undergraduate Scholarhsip <a href="#" class="view">VIEW</a></li>
+            </ol>
         </div>
 
     </div>
