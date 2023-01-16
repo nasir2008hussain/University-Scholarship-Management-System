@@ -261,6 +261,9 @@ if(isset($_SESSION["myUsername"])){
             $username = $_SESSION["myUsername"];
             $row=$db->getadScholarsipInfoStudent($username);
             $count = sizeof($row);
+            if($count==0){
+                echo ("No application is in advertised section.");
+                }
             $i = 0;
             ?>
             <?php for ($i=0;$i<$count;$i++) { ?>
