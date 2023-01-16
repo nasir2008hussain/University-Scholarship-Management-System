@@ -122,8 +122,8 @@ session_start();
     <form action="accountClass.php" method="post">
         <div class="login-block">
             <h1>Login</h1>
-            <input required onchange="setU()" type="text" placeholder="Username" id="username" name="username" />
-            <input required onchange="setP()" type="password" placeholder="Password" id="password" name="password"/>
+            <input required  type="text" placeholder="Username" id="username" name="username" />
+            <input required type="password" placeholder="Password" id="password" name="password"/>
             <br>
             <center>
             <?php

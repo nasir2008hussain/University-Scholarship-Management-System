@@ -16,6 +16,7 @@ if(isset($_SESSION["applyNowSch"])){
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="footbutton.css">
     <link rel="stylesheet" href="menustyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarship Management System</title>
     <style>
       
@@ -96,11 +97,11 @@ if(isset($_SESSION["applyNowSch"])){
         <div class="menu">
             <ul>
                 <li class="appmenu"><a class="active" href="needApplication.php">Instruction</a></li>
-                <li class="appmenu"><a href="needPersonal.php">Personal Infromation</a></li>
-                <li class="appmenu"><a href="needEducation.php">Education Information</a></li>
-                <li class="appmenu"><a href="needFinancial.php">Financial Information</a></li>
-                <li class="appmenu"><a href="needDocument.php">Document</a></li>
-                <li class="appmenu"><a href="needReview.php">Review & Submit</a></li>
+                <li class="appmenu"><a href="#">Personal Infromation</a></li>
+                <li class="appmenu"><a href="#">Education Information</a></li>
+                <li class="appmenu"><a href="#">Financial Information</a></li>
+                <li class="appmenu"><a href="#">Document</a></li>
+                <li class="appmenu"><a href="#">Review & Submit</a></li>
             </ul>
         </div>
         <div class="intro">
@@ -141,6 +142,25 @@ if(isset($_SESSION["applyNowSch"])){
             <a id="next" href="needPersonal.php">Next</a>
         </div>
     </center>
+
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+    include("facadeClass.php");
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
 
 
 </body>

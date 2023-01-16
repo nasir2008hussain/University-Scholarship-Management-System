@@ -2,6 +2,9 @@
 session_start();
 if(isset($_SESSION["myUsername"])){
 ?>
+<?php
+if(isset($_SESSION["forStatus"])){
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +13,7 @@ if(isset($_SESSION["myUsername"])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="headstyle.css">
+    <link rel="stylesheet" href="footer.css">
   
     <title>Document</title>
 </head>
@@ -186,14 +190,25 @@ if(isset($_SESSION["myUsername"])){
         
 
         <center>
+
+        <?php
+            $db = new DBFacade();
+            $username = $_SESSION['myUsername'];
+            $scholarship = $_SESSION['forStatus'];
+            $row=$db->showApplicationStatus($username,$scholarship);
+            $count = sizeof($row);
+            $i = 0;
+            ?>
+
+
             <div class="status">
-                <p id="report">Your application with Tracking ID <h3 id="trackingID">040721343</h3> is <h3 id="final">submitted</h3>successfully! Lorem ipsum dolor sit amet.</p>
+                <p id="report">Your application with Tracking ID <h3 id="trackingID"><?php echo("$row[2]")?></h3> is <h3 id="final"><?php echo("$row[3]")?></h3>successfully! Lorem ipsum dolor sit amet.</p>
             </div>
         </center>
 
         <center>
             <p id="notes">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati accusamus dicta nisi alias debitis perferendis ipsum odit quasi aut porro sit eius fugit, ipsam nam aperiam modi dolorem neque. Vel, fuga? Nostrum quisquam provident rerum, exercitationem nemo eligendi quod laudantium hic magnam, vitae consectetur laboriosam.
+                <b><?php echo("$row[0]")?></b> applied date is <b><?php echo("$row[1]")?></b>  consectetur adipisicing elit. Obcaecati accusamus dicta nisi alias debitis perferendis ipsum odit quasi aut porro sit eius fugit, ipsam nam aperiam modi dolorem neque. Vel, fuga? Nostrum quisquam provident rerum, exercitationem nemo eligendi quod laudantium hic magnam, vitae consectetur laboriosam.
             </p>
         </center>
         <center>
@@ -206,5 +221,7 @@ if(isset($_SESSION["myUsername"])){
 
 
     </body>
-<?php } ?>
+
 </html>
+<?php } ?>
+<?php } ?>

@@ -7,8 +7,6 @@ class Account {
 
   private $username;
   private $password;
-  public static $myName;
-  public static $myPass;
 
   function __construct( $un, $pw) {
  
@@ -48,20 +46,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['login']))
 {
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $account = new Account($username, $password);
+    $id= $account->isAccountValid();
 
-    if($username=="admin"&&$password=="admin")
+    if($id=="admin")
     {
       header('location: adminHome.php');
     } 
-    else{ 
-    $account = new Account($username, $password);
-    
-   $id= $account->isAccountValid();
-    if($id!=-1)
+    else if($id=="student")
     {
          session_start();
           $_SESSION["myUsername"] = "$username";
-          $msg = " Logged in Successfully ....";
           header('location: studentProfile.php');
 
     }
@@ -72,7 +67,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['login']))
       header('location: Login.php'); 
     }    
     }
-  }
+  
 
   else{
     echo ("Fatal Error");

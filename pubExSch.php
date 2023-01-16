@@ -178,13 +178,13 @@
         <div class="menu">
             <ul>
                 <li class="appmenu"><a href="adminHome.php">Home</a></li>
-                <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
+                <li class="appmenu"><a href="createNew.php">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a class="active" href="pubExSch.html">Publish Existing Scholarship</a></li>
                 <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
                 <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
-                <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
+                <li class="appmenu"><a href="contact.php">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
@@ -221,7 +221,7 @@
                 ?>
                <?php for ($i=0;$i<$count;$i++) { ?>
                 <form action="scholarshipClass.php" method="post">
-                <li class="adSch"><input id="archName" type="text" name="schName" value="<?php echo($archiveArray[$i]);?>"> 
+                <li class="adSch"><input readonly id="archName" type="text" name="schName" value="<?php echo($archiveArray[$i]);?>"> 
                 <button id="viewbtn" class="view" value="submit" name="view">VIEW</button></li>
                 </form>
              

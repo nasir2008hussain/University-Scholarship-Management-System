@@ -16,6 +16,7 @@ if(isset($_SESSION["applyNowSch"])){
     <link rel="stylesheet" href="footbutton.css">
     <link rel="stylesheet" href="formstyle.css">
     <link rel="stylesheet" href="menustyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarship Management System</title>
     <style>
         /* ---------------------------------- */
@@ -90,14 +91,14 @@ if(isset($_SESSION["applyNowSch"])){
     <div class="appbody">
         <div class="menu">
             <ul>
-                <li class="appmenu"><a href="meritApplication.php">Instruction</a></li>
-                <li class="appmenu"><a href="meritPersonal.php">Personal Infromation</a></li>
-                <li class="appmenu"><a href="meritEducation.php">Education Information</a></li>
+                <li class="appmenu"><a href="#">Instruction</a></li>
+                <li class="appmenu"><a href="#">Personal Infromation</a></li>
+                <li class="appmenu"><a href="#">Education Information</a></li>
                 <li class="appmenu"><a class="active" href="meritDocument.php">Document</a></li>
-                <li class="appmenu"><a href="meritReview.php">Review & Submit</a></li>
+                <li class="appmenu"><a href="#">Review & Submit</a></li>
             </ul>
         </div>
-        <form action="noaction.php" class="myform" onSubmit="return FileValidation();">
+        <form action="applicantClass.php" id="mdocx"  method="post" enctype="multipart/form-data"  class="myform" onSubmit="return FileValidation();">
             <h3 class="bodyHeadings" id="docHead">Document</h3>
             <p id="docDesc">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis earum mollitia magnam
                 cumque ullam tempore, molestias doloremque totam nostrum ipsum laborum atque dolores cum qui, ut placeat
@@ -112,20 +113,20 @@ if(isset($_SESSION["applyNowSch"])){
 
                 <tr>
                     <td>Intermediate DMC</td>
-                    <td><input onchange="FileValidation1()" type="file" class="docx" accept=".jpg,.jpeg,.png,.pdf," id="interDoc" name="intername"></td>
+                    <td><input onchange="FileValidation1()" type="file" class="docx" accept=".jpg,.jpeg,.png,.pdf," id="interDoc" name="mInterDoc"></td>
                     <td><input type="url" name="remark" id="remark1" readonly></td>
                 </tr>
 
                 <tr>
                     <td>Last Semester Transcript</td>
-                    <td><input onchange="FileValidation2()" type="file" class="docx" id="tranDoc" name="tranname"
+                    <td><input onchange="FileValidation2()" type="file" class="docx" id="tranDoc" name="mSemesterTranscript"
                             accept=".jpg,.jpeg,.png,.pdf"></td>
                     <td><input type="text" name="remark" id="remark2"></td>
                 </tr>
 
                 <tr>
                     <td>Current Semester Challan</td>
-                    <td><input onchange="FileValidation3()" type="file" accept=".jpg,.jpeg,.png,.pdf," class="docx" id="chalDoc" name="chalname"></td>
+                    <td><input onchange="FileValidation3()" type="file" accept=".jpg,.jpeg,.png,.pdf," class="docx" id="chalDoc" name="mSemesterChallan"></td>
                     <td><input type="text" name="remark" id="remark3"></td>
                 </tr>
             </table>
@@ -133,12 +134,30 @@ if(isset($_SESSION["applyNowSch"])){
             <center>
                 <div class="next">
                     <a href="meritEducation.php" class="footbutton">Previous</a>
-                    <button value="submit" class="footbutton">Save</button>
-                    <a href="meritReview.php" class="footbutton">Next</a>
+                    <button value="submit" class="footbutton" name="mDocumentBtn">Save&Next</button>
+                 
                 </div>
             </center>
         </form>
     </div>
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+      include("facadeClass.php");
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
 
     <script>
 
@@ -232,7 +251,7 @@ if(isset($_SESSION["applyNowSch"])){
             r2 = document.getElementById(`remark2`).value
             r3 = document.getElementById(`remark3`).value
       
-            if (r1 == `Success!` && r2 == `Success!` && r3 == `Success!`) {
+            if ((r1 == `Success!` || r1=='') && r2 == `Success!` && r3 == `Success!`) {
               return true
             }
             else {
@@ -240,6 +259,11 @@ if(isset($_SESSION["applyNowSch"])){
             }
 
         }
+
+        $("#mdocx").submit(function(event){
+   loadAjax();
+   event.preventDefault()
+})
 
     </script>
 

@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +8,6 @@ session_start();
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="menustyle.css">
     <link rel="stylesheet" href="footbutton.css">
-
     <title>Scholarhsip Management System</title>
     <style>
         /* ------------------------------- */
@@ -150,7 +146,13 @@ session_start();
     </style>
 </head>
 
-<body onload="myFunction()">
+<body>
+    <?php
+    include("facadeClass.php");
+    $db=new DBFacade();
+    $deptArray = $db->getDepartment();
+    $count = sizeof($deptArray);
+    ?>
     <div class="myhead">
         <div id="logo">
             <img id="qaulogo" src="qau.jpg" alt="loading....">
@@ -182,7 +184,7 @@ session_start();
                 <li class="appmenu"><a class="active" href="createNew.php">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
-                <li class="appmenu"><a href="shortlist.html">View Shortlisted Candidates</a></li>
+                <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
                 <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
                 <li class="appmenu"><a href="contact.php">Update Contact Details</a></li>
@@ -195,91 +197,111 @@ session_start();
                 consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum
                 nulla obcaecati
             </p>
-            <form action="scholarshipClass.php" method="post">
-                <?php
-                $name = $_SESSION["schNameBySearch"];
-                include("facadeClass.php");
-                $db = new DBFacade();
-                $resultArray = $db->searchScholarship($name);
-                ?>
+            <form action="scholarshipClass.php" method="post" onSubmit="return validate();">
                 <label for="schName" class="allReq">Name of Scholarhsip</label>
-                <input type="text" name="schName" readonly value="<?php echo("$resultArray[0]");?>" id="schId"
-                required>
+                <input onchange="validate()" type="text" name="schName" id="schId" required>
+
                 <label for="schCategory" class="rightside" class="allReq">Category of Scholarship</label>
-                <select name="category" id="schCategory">
-                    <option value="<?php echo($resultArray[1]);?>" selected="selected" readonly>
-                        <?php echo($resultArray[1]);?> base Category
-                    </option>
+                <select name="category" id="schCategory" onchange="showContent()" required>
+                    <option value="" selected="selected" disabled="disabled">Select a Category</option>
+                    <option onchange="showContent()" value="merit">Merit Based Scholarhsip</option>
+                    <option onchange="showContent()" value="need">Need Based Scholarhsip</option>
                 </select>
                 <br>
-                <label for="seat" class="allReq">Total Number of Seat</label>                
-                <input type="text" readonly value="<?php echo($resultArray[3]);?>"  name="seat" id="seat" required min="1">
+                <label for="seat" class="allReq">Total Number of Seat</label>
+                <input type="number" name="seat" id="seat" required min="1" pattern="/^-?\d+\.?\d*$/"
+                    onKeyPress="if(this.value.length==5) return false;">
+
                 <label for="lastDateApply" class="rightside" class="allReq">Closing Date</label>
-                <input type="date"   name="lastDate" id="lastDateApply" min="<?php date("Y/m/d") ?>" required>
-                <br>
+                <input type="date" name="lastDate" id="lastDateApply" required>
 
                 <label for="seat" class="allReq">Amount per Students</label>
-                <input type="text" readonly name="stipend" id="seat" required min="1" pattern="/^-?\d+\.?\d*$/"
-                   value="<?php echo($resultArray[2]);?>"  onKeyPress="if(this.value.length==7) return false;">
+                <input type="number" name="stipend" id="seat" required min="1" pattern="/^-?\d+\.?\d*$/"
+                    onKeyPress="if(this.value.length==7) return false;">
 
                 <label for="Interview" class="rightside" class="allReq">Publishing Date</label>
-                <input type="date" name="publishDate" id="publishDate" readonly required>
-                <br>
-
+                <input type="date" name="publishDate" readonly  id="publishDate" required>
                 <hr>
+
                 <div class="need" id="needDisplay">
                     <h3 class="headingsAdmin">Set Need Based Criteria</h3>
                     <label for="maxIncome" id="incomeLable">Maximum Monthly Income</label>
-                    <input type="text" readonly name="income" value=" <?php echo($resultArray[6]);?>"  id="income" min="1000" required>
+                    <input type="number" name="income" id="income" min="1000" pattern="/^-?\d+\.?\d*$/"
+                        onKeyPress="if(this.value.length==7) return false;">
                     <hr>
                 </div>
 
                 <div class="merit" id="meritDisplay">
                     <h3 class="headingsAdmin">Set Merit Based Criteria</h3>
                     <label for="Inter" class="mLable">Minimum Intermediate Percentage</label>
-                    <input type="text" readonly name="Inter" id="minInter" max="90" value="<?php echo($resultArray[7]);?>">
+                    <input type="number" name="Inter" id="minInter" min="50" max="95" pattern="/^-?\d+\.?\d*$/"
+                        onKeyPress="if(this.value.length==2) return false;">
                     <br>
                     <label for="cgpa" class="mLable">Minimum CGPA</label>
-                    <input type="number" readonly name="minCgpa" id="minCGPA" max="4" value="<?php echo($resultArray[6]);?>">
+                    <input type="number" name="minCgpa" id="minCGPA" min="0" step="0.1" max="4" pattern="/^-?\d+\.?\d*$/"
+                        onKeyPress="if(this.value.length==3)  return false;">
                     <br>
                     <label for="program" class="mLable">Specified Program for Scholarhsip</label>
                     <select name="Sprogram" id="Sprogram">
-                    <option value="<?php echo($resultArray[8]);?>" selected="selected">
-                        <?php echo($resultArray[8]);?>
-                    </option>
-                      
+
+                        <option value="All" selected="selected">For All Program</option>
+                        <option value="BS 4 year">BS 4 year</option>
+                        <option value="MSc">MSc</option>
+                        <option value="MPhil">Mphil</option>
+                        <option value="Ph.D.">Ph.D.</option>
                     </select>
+
                     <label for="program" class="mLable">Specified Department for Scholarhsip</label>
                     <select name="Sdept" id="Sdept">
-                        <option value="0" selected="selected"><?php echo($resultArray[9]) ?></option>      
+                    <option value="All" selected="selected">For All Department</option>
+                        <?php for($i=0;$i<$count;$i++) {?>
+                        <option value="<?php echo($deptArray[$i]) ?>"><?php echo($deptArray[$i]) ?></option>
+                        <?php } ?>
                     </select>
                     <br>
                     <label for="semester" class="mLable">Specified Semester for Scholarhsip</label>
-                    <select name="Ssemester" id="Ssemester" readonly>
-                        <option value=" <?php echo($resultArray[11]);?>" selected="selected"> <?php echo($resultArray[11]);?></option>
+                    <select name="Ssemester" id="Ssemester" >
+
+                        <option value="All" selected="selected">For All Semester except 1st</option>
+                        <option value="1">1st Semester</option>
+                        <option value="2">2nd Semester</option>
+                        <option value="3">3rd Semester</option>
+                        <option value="4">4th Semester</option>
+                        <option value="5">5th Semester</option>
+                        <option value="6">6th Semester</option>
+                        <option value="7">7th Semester</option>
+                        <option value="8">8th Semester</option>
+                        <option value="9">9th Semester</option>
+                        <option value="10">10th Semester</option>
                     </select>
 
                     <label for="region" class="mLable">Scholarhsip for Any Specified Region</label>
-                    <select name="docmicile" id="domicile" readonly>
-                        <option value=" <?php echo($resultArray[10]);?>" selected="selected"> <?php echo($resultArray[10]);?></option>
+                    <select name="domicile" id="domicile" >
+                        <option value="All" selected="selected">For overall Pakistan</option>
+                        <option value="GB">Gigit-Baltistan</option>
+                        <option value="AJK">AJK</option>
+                        <option value="KPK">KPK</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Balochistan">Balochistan</option>
+                        <option value="FATA">FATA</option>
+                        <option value="ICT">Islamabad Capital Territory</option>
+                        <option value="Sindh Urban">Sindh Urban</option>
+                        <option value="Sindh Rural">Sindh Rural</option>
                     </select>
                     <hr>
-                    
                 </div>
                 <center>
                     <div class="next">
-                      <button class="footbutton" name="existAdBtn" value="SUBMIT">PUBLISH</button>
+                        <button class="footbutton"
+                            value="submit" name="create">PUBLISH</button>
                     </div>
+
                 </center>
             </form>
 
         </div>
 
     </div>
-    <footer>
-    <center>
-    <div class="qauFooter">
-
 
     <script>
         var today = new Date();
@@ -297,28 +319,96 @@ session_start();
         var maxtoday = (yyyy + 1) + `-` + mm + `-` + dd;
         document.getElementById("lastDateApply").setAttribute("max", maxtoday);
 
-        document.getElementById(`publishDate`).value=today;
+        document.getElementById( "publishDate").value=today;
+       
+        function doesContainNumber(name) {
+            for (i = 0; i < name.length; i++) {
+                if(name[i]==` `){
+                    continue
+                }
+                if (!((name[i] >= 'a' && name[i] <= 'z') || (name[i] >= 'A' && name[i] <= 'Z'))) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
-  
-            function myFunction() {
-                let a = document.getElementById(`schCategory`).value;
-                if(a=="need"){
-                    let need = document.getElementById(`needDisplay`)
-                    let displaySet2 = need.style.display
-                    if(displaySet2==''){
-                        need.style.display = `block`
+
+        function validate() {
+            let name = document.getElementById(`schId`).value
+            if (name.length == 0 || !doesContainNumber(name)) {
+                let errorName = document.getElementById("schId");
+                errorName.style.border = "1px solid red";
+                return false
+            }
+            else {
+                let errorName = document.getElementById("schId");
+                errorName.style.border = "1px solid black";
+                return true
+            }
+        }
+
+        function showContent() {
+            let income = document.getElementById(`income`)
+            let cgpa = document.getElementById(`minCGPA`)
+            let inter = document.getElementById(`minInter`)
+            let show = document.getElementById(`schCategory`).selectedIndex
+            let merit = document.getElementById(`meritDisplay`)
+            let need = document.getElementById(`needDisplay`)
+            let displaySet1 = merit.style.display
+            let displaySet2 = need.style.display
+            if (displaySet1 == `` && displaySet2 == ``) {
+                if (show == 1) {
+                    if (displaySet1 == ``) {
+                        merit.style.display = `block`
+                        if (displaySet2 == `block`) {
+                            need.style.display = `none`
+                        }
+                    }
+                    if (displaySet1 == `block`) {
+                        if (displaySet2 == `block`) {
+                            need.style.display = `none`
+                        }
                     }
                 }
-                if(a=="merit"){
-                    let merit = document.getElementById(`meritDisplay`)
-                    let displaySet1 = merit.style.display
-                    if(displaySet1==''){
-                        merit.style.display = `block`
+
+                else {
+                    if (displaySet2 == ``) {
+                        need.style.display = `block`
+                        if (displaySet1 == `block`) {
+                            merit.style.display = `none`
+                        }
+                    }
+                    if (displaySet2 == `block`) {
+                        if (displaySet1 == `block`) {
+                            merit.style.display = `none`
+                        }
                     }
 
                 }
             }
 
+            if (displaySet1 == `` && displaySet2 == `block`) {
+                merit.style.display = `block`
+                need.style.display = ``
+            }
+            if (displaySet1 == `block` && displaySet2 == ``) {
+                need.style.display = `block`
+                merit.style.display = ``
+            }
+
+            if (merit.style.display == `block`) {
+                inter.setAttribute('required', '');
+                cgpa.setAttribute('required', '');
+                income.removeAttribute(`required`)
+            }
+            
+            if (need.style.display == `block`) {
+                income.setAttribute(`required`, ``);
+                inter.removeAttribute('required');
+                cgpa.removeAttribute('required');
+            }
+        }
 
 
 

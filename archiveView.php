@@ -15,6 +15,7 @@ if(isset($_SESSION["applyNowSch"])){
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="footbutton.css">
     <link rel="stylesheet" href="formstyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarhsip Management System</title>
     <style>
         .schHead {
@@ -181,6 +182,24 @@ if(isset($_SESSION["applyNowSch"])){
             <!-- <a href="needApplication.php" id="ApplyNow">APPLY</a> -->
         </div>
     </center>
+
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
 
 
 

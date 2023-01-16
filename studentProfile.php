@@ -11,6 +11,7 @@ if(isset($_SESSION["myUsername"])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="headstyle.css">
+    <link rel="stylesheet" href="footer.css">
     
 
     <title>Document</title>
@@ -202,6 +203,7 @@ if(isset($_SESSION["myUsername"])){
                 <?php
                 include("facadeClass.php");
                 $db=new DBFacade();
+
                 $Name2 = $db->retrieveStudentInfo($myName);
                 echo '<img id="mydp" src="data:image/jpeg;base64,' . base64_encode($Name2[5]) . '" width="40" height="40"/>';
                 ?>
@@ -230,8 +232,23 @@ if(isset($_SESSION["myUsername"])){
         <button class="collapsible">Current Scholarship Status</button>
         <div class="content">
             <ol type="1">
-                <li> <a>Ehsaas Undergraduate Scholarship</a> <a href="status.php" class="status">View Status</a> </li>
-                <li> <a>PM Undergraduate Scholarship</a> <a href="status.php" class="status">View Status</a> </li>
+<?php
+            $db = new DBFacade();
+            $username=  $_SESSION["myUsername"];
+            $row=$db->getApplicationStatus($username);
+            $count = sizeof($row);
+            if($count==0){
+            echo ("No application is in processing, start applying Now.");
+            }
+            $i = 0;
+            ?>
+             <?php for ($i=0;$i<$count;$i++) { ?>
+                <form action="applicantClass.php" method="post">
+                <li> <input type="text" name="applySchStatus" id="applyNowSch" readonly value="<?php echo($row[$i]);?>"> <button class="apply" name="viewStatus" value="submit">View</button></li>
+                </form>
+                
+            <?php }  ?>
+            </ol>
             </ol>
         </div>
 
@@ -278,6 +295,24 @@ if(isset($_SESSION["myUsername"])){
         <div class="h" style="visibility: hidden;">
         
     </div>
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input style="width: 200px;" type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input  style="width: 200px;" type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
+
     </body>
     <script>
     

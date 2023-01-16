@@ -14,6 +14,7 @@ if(isset($_SESSION["applyNowSch"])){
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="footbutton.css">
     <link rel="stylesheet" href="formstyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarhsip Management System</title>
     <style>
         .schHead {
@@ -130,12 +131,12 @@ if(isset($_SESSION["applyNowSch"])){
         <ol type="a">
         <li class="Ecriteria">It is a <b>Merit Base Scholarhsip</b>. Only those student who are on regular basis can apply for this scholarhsip</li>
             <li class="Ecriteria">The minimum Intermediate Percentage required to apply for this scholarhsip is <b><?php echo($schInfoArray[7])?></b>. </li>
-            <li class="Ecriteria">The Minimum CGPA required for this scholarhsip is <b><?php echo($schInfoArray[6])?></b> cgpa. No need to worry if you are first semester student. </li>
+            <li class="Ecriteria">The Minimum CGPA required for this scholarhsip is <b><?php echo($schInfoArray[6])?></b> cgpa. In 1st semester scholarhsip program CGPA is not matter, so continue apply. </li>
             <li class="Ecriteria">Student from <b><?php echo($schInfoArray[8])?></b> Program can apply for this scholarhsip.</li>
-            <li class="Ecriteria">Student from <b><?php echo($schInfoArray[9])?></b> Department can apply for this scholarhsip.</li>
+            <li class="Ecriteria">Student from <b><?php echo($schInfoArray[9])?></b> can apply for this scholarhsip.</li>
             <li class="Ecriteria">Student from <b><?php echo($schInfoArray[10])?></b> region (domicile) can apply for this scholarhsip.
             </li>
-            <li class="Ecriteria">Student of <b><?php echo($schInfoArray[11])?></b> semester can apply for this scholarhsip.
+            <li class="Ecriteria">Student of <b><?php echo($schInfoArray[11])?></b> semester can apply for this scholarhsip. If you are 1st semester student then you can only apply for 1st semester scholarship program.
             </li>
         </ol>
     </div>
@@ -186,6 +187,24 @@ if(isset($_SESSION["applyNowSch"])){
             <!-- <a href="needApplication.php" id="ApplyNow">APPLY</a> -->
         </div>
     </center>
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
+
 
 
 

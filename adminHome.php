@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="menustyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarhsip Management System</title>
     <style>
         /* ------------------------------- */
@@ -133,13 +134,13 @@
         <div class="menu">
             <ul>
                 <li class="appmenu"><a class="active" href="adminHome.php">Home</a></li>
-                <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
+                <li class="appmenu"><a href="createNew.php">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
                 <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
                 <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
-                <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
+                <li class="appmenu"><a href="contact.php">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
@@ -200,6 +201,26 @@
         </div>
 
     </div>
+
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
+
+   
 
         
 

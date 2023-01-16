@@ -152,13 +152,13 @@
         <div class="menu">
             <ul>
                 <li class="appmenu"><a href="adminHome.php">Home</a></li>
-                <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
+                <li class="appmenu"><a href="createNew.php">Create New Scholarship</a></li>
                 <li class="appmenu"><a class="active" href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
                 <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
                 <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
-                <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
+                <li class="appmenu"><a href="contact.php">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
@@ -180,18 +180,13 @@
                     ?>
                     <?php for ($i=0;$i<$count;$i++) { ?>
                         <li class="adLit">
-                        <form action="updateSchPHP.php" method="post">
+                        <form action="scholarshipClass.php" method="post">
                         <input class="schName" readonly value="<?php echo($row[$i]); $i++;?>" name="schName">
                         <button class="lastDate" name="updateAdBtn" >SAVE</button> 
-                         <input value="<?php echo($row[$i]); ?>" min="<?php echo($row[$i]); ?>" name="lastDate"  type="date" class="lastDate" id="d1" onchange="enableSubmit()">
+                         <input value="<?php echo($row[$i]); ?>" min="<?php echo($row[$i]); ?>" name="lastDate"  type="date" class="lastDate" id="d1" >
                         </form>
                     <?php }  ?>
                         </li>
-                    <!-- <li class="adList"> <a>Ehsaas Undergraduate Scholarship</a>
-                        <button value="submit" class="lastDate" onclick="disableDate()">SAVE</button>
-                        <input type="button" name="ext" id="ext1" value="EXTEND" class="lastDate" onclick="extend()">
-                        <input type="date" disabled="disabled" class="lastDate" id="d1">
-                    </li> -->
 
                 </ol>
         </div>

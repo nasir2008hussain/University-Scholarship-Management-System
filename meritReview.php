@@ -17,6 +17,7 @@ if(isset($_SESSION["applyNowSch"])){
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="footbutton.css">
     <link rel="stylesheet" href="formstyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarship Management System</title>
     <style>
         .appHead {
@@ -124,38 +125,50 @@ if(isset($_SESSION["applyNowSch"])){
     <div class="appbody">
         <div class="menu">
             <ul>
-                <li class="appmenu"><a href="meritApplication.php">Instruction</a></li>
-                <li class="appmenu"><a href="meritPersonal.php">Personal Infromation</a></li>
-                <li class="appmenu"><a href="meritEducation.php">Education Information</a></li>
-                <li class="appmenu"><a href="meritDocument.php">Document</a></li>
+                <li class="appmenu"><a href="#">Instruction</a></li>
+                <li class="appmenu"><a href="#">Personal Infromation</a></li>
+                <li class="appmenu"><a href="#">Education Information</a></li>
+                <li class="appmenu"><a href="#">Document</a></li>
                 <li class="appmenu"><a class="active" href="meritReview.php">Review & Submit</a></li>
             </ul>
         </div>
-        <form action="noaction.php" class="myform" onSubmit="return validate();">
-            <h3 class="bodyHeadings" id="sop">Statement of Purpose</h3>
+        <form action="applicantClass.php" method="post" class="myform" enctype="multipart/form-data" onSubmit="return validate();">
+            <h3 class="bodyHeadings" id="sop">Term and Conditions</h3>
             <p id="sop">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda, quas? Quos rem dignissimos
-                molestiae voluptate, illum facere eveniet animi ipsum quis vero? (character limit 1200)</p>
+                molestiae voluptate, illum facere eveniet animi ipsum quis vero? (character limit 800)</p>
             <hr>
-            <input name="sopname" id="mysop" required maxlength="1200" minlength="400" autocomplete="off" autofocus>
             <br>
+         
 
             <p id="final">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur delectus eum vero ipsam
                 quaerat corporis possimus?</p>
-
-            <input type="text" name="nameblock" id="sign" required autocomplete="off" autofocus>
-
-            <label for="error" id="errorSign"></label>
-            <br>
+                <br>
+                <h4>By submitting you are agree to University term and Conditions.</h4>
 
             <div class="next">
-                <button value="submit" class="footbutton">SUBMIT</button>
+                <button value="submit" class="footbutton" name="mFinalBtn">SUBMIT</button>
             </div>
-
-
         </form>
 
     </div>
-   
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+    include("facadeClass.php");
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
 
 
 </body>

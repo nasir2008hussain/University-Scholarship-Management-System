@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="headstyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarhsip Management System</title>
     <style>
         /* ------------------------------- */
@@ -177,6 +178,25 @@
 
         </ol>
     </div>
+
+  
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
 
 
     <!-- ------------------------------------------------------------------- -->

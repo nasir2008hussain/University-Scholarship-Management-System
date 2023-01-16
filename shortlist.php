@@ -130,6 +130,26 @@
             cursor: pointer;
             color: white;
         }
+        .apply {
+            float: right;
+            background-color: #05ca82;
+            border: 1px solid #059c65;
+            border-radius: 2px;
+            color: white;
+            width: 75px;
+            text-align: center;
+            margin-right: 5px;
+            text-decoration: none;
+            padding: 0.5px 0.5px;
+            font-size: medium;
+        }
+
+        .apply:hover {
+            cursor: pointer;
+            background-color: black;
+            color: white;
+
+        }
 
 
 
@@ -165,26 +185,40 @@
         <div class="menu">
             <ul>
                 <li class="appmenu"><a href="adminHome.php">Home</a></li>
-                <li class="appmenu"><a href="createNew.html">Create New Scholarship</a></li>
+                <li class="appmenu"><a href="createNew.php">Create New Scholarship</a></li>
                 <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
                 <li class="appmenu"><a  class="active" href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
                 <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
-                <li class="appmenu"><a href="contact.html">Update Contact Details</a></li>
+                <li class="appmenu"><a href="contact.php">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
-            <h3 class="headingsAdmin">Recently Archived Scholarhsip</h3>
+            <h3 class="headingsAdmin">Generate Shortlist</h3>
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum ab quas illum odio qui repellat,
                 consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum
                 nulla obcaecati
             </p>
             <ol>
-                <li class="adSch">Ehsaas Undergraduate Scholarhsip <a href="#" class="view">VIEW</a></li>
-                <li class="adSch">PM Undergraduate Scholarhsip <a href="#" class="view">VIEW</a></li>
-                <li class="adSch">GB Govt Undergraduate Scholarhsip <a href="#" class="view">VIEW</a></li>
+                <?php
+                include("facadeClass.php");
+                $db = new DBFacade();
+                $row = $db->getForShortlist();
+                
+
+            $count = sizeof($row);
+            if($count==0){
+            echo ("No scholarship in this section");
+            }
+            $i = 0;
+            ?>
+            <?php for ($i=0;$i<$count;$i++) { ?>
+                <form action="scholarshipClass.php" method="post">
+                <li> <input style="border: 0px solid black; width: 50%;"  type="text" name="applySch" id="applyNowSch" readonly value="<?php echo($row[$i]);?>"> <button class="apply" name="doShortlist" value="submit">Generate</button></li>
+                </form>
+            <?php }  ?>
             </ol>
         </div>
 

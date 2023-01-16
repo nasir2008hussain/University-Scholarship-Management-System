@@ -125,10 +125,7 @@ if($scholarship->getCategory()=="merit"){
       $db->createMeritScholarship($merit,$scholarship);
 
 }
-  } else {
-    echo "Fatal Error";
-  }
-
+  } 
 ?>
 
 <?php
@@ -169,6 +166,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['btnSearch'])) {
     }
 }
 
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['view'])) {
     $name = $_POST['schName'];
     $db = new DBFacade();
@@ -184,6 +183,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['view'])) {
     else{
         echo ("No search Result Found");
     }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['updateAdBtn'])) {
+
+  $name = $_POST['schName'];
+  $lastDate = $_POST['lastDate'];
+  $db = new DBFacade();
+  $db->updateScholarship($name, $lastDate);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['existAdBtn'])) {
+
+  $sname = $_POST['schName'];
+  $lastDate = $_POST['lastDate'];
+  $publishDate = $_POST['publishDate'];
+  $db = new DBFacade();
+  $db->publishExistsScholarship($sname, $lastDate, $publishDate);
 }
 
 

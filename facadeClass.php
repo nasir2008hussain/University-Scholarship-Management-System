@@ -2,7 +2,7 @@
 
 class DBFacade
 {
-   public $Name;
+
    public function connect()
    {
       $conn = new mysqli("localhost", "root", "", "university scholarship management system", 3306);
@@ -16,19 +16,72 @@ class DBFacade
       $username = $account->getUsername();
       $password = $account->getPassword();
 
-      $query = "SELECT * FROM students WHERE registration = '$username' AND password = '$password'";
+      $query = "SELECT * FROM admin WHERE name = '$username' AND password = '$password'";
       $results = mysqli_query($this->connect(), $query);
-
       if (mysqli_num_rows($results) > 0) {
          $row = mysqli_fetch_row($results);
-
-         $query1 = "SELECT * FROM students WHERE registration = '$row[0]'";
+         $query1 = "SELECT * FROM admin WHERE password = '$row[3]'";
          $results1 = mysqli_query($this->connect(), $query1);
          $row2 = mysqli_fetch_row($results1);
-         return $row2[0];
+         $std = "admin";
+         return $std;
       }
-      return -1;
+      else{
+         $query = "SELECT * FROM students WHERE registration = '$username' AND password = '$password'";
+         $results = mysqli_query($this->connect(), $query);
+   
+         if (mysqli_num_rows($results) > 0) {
+            $row = mysqli_fetch_row($results);
+   
+            $query1 = "SELECT * FROM students WHERE registration = '$row[0]'";
+            $results1 = mysqli_query($this->connect(), $query1);
+            $row2 = mysqli_fetch_row($results1);
+            $std = "student";
+            return $std;
+         }
+         return -1;
+      }
    }
+
+   function getDepartment()
+   {
+      $query1 = "SELECT * FROM departments ";
+      $results1 = mysqli_query($this->connect(), $query1);
+      $i = 0;
+      $deptArray=array();
+      if ($results1->num_rows > 0) {
+         while ($optionData = $results1->fetch_assoc()) {
+            $deptArray[$i] = $optionData['departmentName'];
+            $i++;
+         }
+      }
+      return $deptArray;
+   }
+
+   function setContact($contact,$mail){
+      $my_query1 = "UPDATE admin SET contact = '$contact', email='$mail' WHERE name='admin'";
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      if ($result1) {
+         header('location:adminHome.php');
+      } else {
+         echo ("Not updated successfully");
+      }
+
+   }
+
+   function getFooter()
+   {
+      $query = "SELECT * FROM admin WHERE name='admin'";
+      $results = mysqli_query($this->connect(), $query);
+      $contactDetail = array();
+      if (mysqli_num_rows($results) > 0) {
+         $row = mysqli_fetch_row($results);
+         $contactDetail[0] = $row[0];
+         $contactDetail[1] = $row[1];
+      }
+      return $contactDetail;
+   }
+
 
 
    function createNeedScholarship($need, $scholarship)
@@ -69,10 +122,9 @@ class DBFacade
       $domicile = $merit->getRegion();
       $department = $merit->getDept();
       $income = "NULL";
-      echo ("$name, $seat,$stipend,$lastDate,$publishDate,$category,$minCgpa,$inter,$program,$domicile,$department, $semester,$income");
+      // echo ("$name, $seat,$stipend,$lastDate,$publishDate,$category,$minCgpa,$inter,$program,$domicile,$department, $semester,$income");
      
       $my_query1 = "INSERT INTO scholarships (name, seat, stipend, lastDate, publishDate, category,income,minCgpa,interPercent,program,department,domicile,semester) VALUES ('$name', '$seat','$stipend', '$lastDate', '$publishDate','$category',NULL,'$minCgpa','$inter','$program','$department','$domicile','$semester' )";
-
 
       $results1 = mysqli_query($this->connect(), $my_query1);
       if($results1) {
@@ -100,7 +152,7 @@ class DBFacade
    }
 
    function getarchScholarsipInfo(){
-      $my_query1 = "SELECT * FROM scholarships WHERE lastDate < now()";
+      $my_query1 = "SELECT * FROM scholarships WHERE lastDate > DATE_SUB(now(), INTERVAL 3 MONTH) && lastDate < now()";
       $result1 = mysqli_query($this->connect(), $my_query1);
       $i = 0;
       $arrScholarship = array();
@@ -117,7 +169,7 @@ class DBFacade
          $my_query1 = "UPDATE scholarships SET lastDate = '$lastDate' WHERE name='$sname'";
          $result1 = mysqli_query($this->connect(), $my_query1);
          if ($result1) {
-            echo ("Record updated successfully");
+            header('location:updateAd.php');
          } else {
             echo ("Not updated successfully");
          }
@@ -185,7 +237,8 @@ class DBFacade
          echo ($row["lastDate"]);
          echo($row["publishDate"]);
       }
-      $my_query1 = "UPDATE scholarships SET lastDate = '$lastDate', publishDate='$publishDate' WHERE name='$sname'";
+      $status = "active";
+      $my_query1 = "UPDATE scholarships SET lastDate = '$lastDate', publishDate='$publishDate', currentStatus='$status' WHERE name='$sname'";
       $result1 = mysqli_query($this->connect(), $my_query1);
       if ($result1) {
          header('location: adminHome.php');
@@ -427,7 +480,15 @@ class DBFacade
       }
       
 
-      if($searchStdResult[0]>=$searchScholarshipResult[1] || $searchStdResult[5]=="1"){
+      if($searchStdResult[5]=="1"){
+         if($searchStdResult[5]==$searchScholarshipResult[6]){
+            if($searchStdResult[1]>=$searchScholarshipResult[2]){
+               $eligible = "1";
+               return $eligible;
+            }
+         }
+      }
+      else if($searchStdResult[0]>=$searchScholarshipResult[1]){
          if($searchStdResult[1]>=$searchScholarshipResult[2]){
             if($searchStdResult[2]==$searchScholarshipResult[3]||$searchScholarshipResult[3]=="All"){
                if($searchStdResult[3]==$searchScholarshipResult[4]||$searchScholarshipResult[4]=="All"){
@@ -459,13 +520,14 @@ class DBFacade
          $city = $row["city"];
          $permAdd = $row["permanentAddress"];
          $currAdd = $row["residentialAddress"];
+         $altContact = $row["altContactNo"];
          $my_query13 = "SELECT * FROM domicile WHERE domicileId='$dmc'";
          $results13 = mysqli_query($this->connect(), $my_query13);
          while ($row13 = mysqli_fetch_array($results13)) {
             $dmc  = $row13["domicileName"];
          }
       }
-      $studentInfo=array($Name,$FatherName,$Gender,$Cnic,$DOB,$Contact,$dmc,$email,$city,$permAdd,$currAdd);
+      $studentInfo=array($Name,$FatherName,$Gender,$Cnic,$DOB,$Contact,$dmc,$email,$city,$permAdd,$currAdd,$altContact);
       return $studentInfo;
    }
 
@@ -507,7 +569,164 @@ class DBFacade
       $studentInfo=array($iProgram,$iMarks,$iTotal,$iYear,$semester,$department,$program,$cgpa,$gpa,$admitY,$grad);
       return $studentInfo;
    }
- 
+
+   // ---------------applicant-------------------------------
+   function updateStudentInfo($studentInfo){
+
+      $username = $studentInfo->getUsername();
+      $contact = $studentInfo->getContact();
+      $email = $studentInfo->getEmail();
+      $address = $studentInfo->getCurrAdd();
+      $altContact = $studentInfo->getAltContact();
+   
+  
+      $my_query1 = "UPDATE students SET contactNo= '$contact', email = '$email', residentialAddress='$address', altContactNo='$altContact'  WHERE registration='$username'";
+      echo ("here, $username,$email,$contact,$address,$altContact ---");
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      if ($result1) {
+         $ret = "1";
+         return $ret;
+      } else {
+         $retsvalue = "2";
+         return $retsvalue;
+      }
+   }
+
+   // --------------------applying for merit scholarhsip----------------------------
+
+   function applyingForMerit($meritApply){
+      $username = $meritApply->getUsername();
+      $schName = $meritApply->getScholarshipName();
+      $inter = $meritApply->getInter();
+      $challan = $meritApply->getChallan();
+      $transcript = $meritApply->getTranscript();
+      $myDate = date('Y-m-d');
+      $status = "submitted";
+      $inter = mysqli_real_escape_string($this->connect(),$inter);
+      $challan = mysqli_real_escape_string($this->connect(),$challan);
+      $transcript=mysqli_real_escape_string($this->connect(),$transcript);
+      $my_query1 = "INSERT INTO applicants (applicantRegNo, applicantScholarshipName, applyDate, interDoc, semesterChallan, transcripts,applicationStatus) VALUES ('$username','$schName','$myDate','$inter','$challan','$transcript','$status')";
+
+   
+      $results1 = mysqli_query($this->connect(), $my_query1);
+      if($results1) {
+      $ret="1";
+         return $ret;
+      } else {
+      $ret="2";
+         return $ret;
+      }
+   }
+
+
+   // need base applying
+
+   function applyingForNeed($needApply){
+      $username = $needApply->getUsername();
+      $schName = $needApply->getScholarshipName();
+      $inter = $needApply->getInter();
+      $challan = $needApply->getChallan();
+      $transcript = $needApply->getTranscript();
+      $myDate = date('Y-m-d');
+      $status = "submitted";
+
+      $income = $needApply->getIncome();
+      $reserve = $needApply->getReserve();
+      $exp = $needApply->getExp();
+      $saving = $needApply->getNet();
+      $prop = $needApply->getProp();
+      $house = $needApply->getHouse();
+      $payslip = $needApply->getPaySlip();
+      $ebill = $needApply->getEbill();
+  
+
+      $inter = mysqli_real_escape_string($this->connect(),$inter);
+      $challan = mysqli_real_escape_string($this->connect(),$challan);
+      $transcript=mysqli_real_escape_string($this->connect(),$transcript);
+      $payslip=mysqli_real_escape_string($this->connect(),$payslip);
+      $ebill=mysqli_real_escape_string($this->connect(),$ebill);
+
+      $income1 = intval($income);
+      $exp1 = intval($exp);
+      $saving1 = intval($saving);
+      $prop1 = intval($prop);
+
+      echo (var_dump($transcript));
+
+      echo("$username,$schName,$income1,$exp1,$saving1,$prop1,$house,$reserve,$status");
+
+      $my_query1 = "INSERT INTO applicants (applicantRegNo, applicantScholarshipName, applyDate, interDoc,  
+      semesterChallan, 
+transcripts,applicationStatus,reserved,totalIncome,totalExpenses,savedIncome,propertyWorth,House) VALUES ('$username','$schName','$myDate','$inter','$challan','$transcript','$status','$reserve','$income1',
+'$exp1','$saving1','$prop1','$house')";
+
+      $results1 = mysqli_query($this->connect(), $my_query1);
+      if($results1) {
+      $ret="1";
+         return $ret;
+      } else {
+      $ret="2";
+         return $ret;
+      }
+
+   }
+
+   // -------------------------shortlisting------------------------------
+
+   function getForShortlist(){
+      $status="active";
+      $my_query1 = "SELECT * FROM scholarships WHERE currentStatus='$status' && lastDate<now()";
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      $i = 0;
+      $arrScholarship = array();
+      while ($row = mysqli_fetch_array($result1)) {
+         $Name = $row["name"];
+         $arrScholarship[$i] = ($Name);
+         $i++;
+      }
+      return $arrScholarship;
+   }
+
+   // ----------------for status of application-------------------------------
+
+   function getApplicationStatus($username){
+      $status = "submitted";
+      $my_query1 = "SELECT * FROM applicants WHERE applicantRegNo='$username' AND  applicationStatus='$status'";
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      $i = 0;
+      $statusReport = array();
+      while ($row = mysqli_fetch_array($result1)) {
+         $Name = $row["applicantScholarshipName"];
+         $statusReport[$i] = ($Name);
+         $i++;
+      }
+      return $statusReport;
+
+   }
+
+   function showApplicationStatus($username,$scholarshipName){
+      $status = "submitted";
+      $my_query1 = "SELECT * FROM applicants WHERE applicantRegNo='$username' AND  applicantScholarshipName='$scholarshipName' AND applicationStatus='$status'";
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      $i = 0;
+      $statusReport = array();
+      while ($row = mysqli_fetch_array($result1)) {
+         $Name = $row["applicantScholarshipName"];
+         $statusReport[$i] = ($Name);
+         $i++;
+         $report=$row["applyDate"];
+         $statusReport[$i] = $report;
+         $i++;
+         $tracking = $row["applicantID"];
+         $statusReport[$i] = $tracking;
+         $i++;
+         $currStatus = $row["applicationStatus"];
+         $statusReport[$i] = $currStatus;
+         $i++;
+      }
+      return $statusReport;
+
+   }
 
 }
 ?>

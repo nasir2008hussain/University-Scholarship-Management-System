@@ -17,6 +17,7 @@ if(isset($_SESSION["applyNowSch"])){
     <link rel="stylesheet" href="footbutton.css">
     <link rel="stylesheet" href="formstyle.css">
     <link rel="stylesheet" href="menustyle.css">
+    <link rel="stylesheet" href="footer.css">
     <title>Scholarship Management System</title>
     <style>
         /* ----------------------------------- */
@@ -84,16 +85,16 @@ if(isset($_SESSION["applyNowSch"])){
     <div class="appbody">
         <div class="menu">
             <ul>
-                <li class="appmenu"><a href="needApplication.php">Instruction</a></li>
-                <li class="appmenu"><a href="needPersonal.php">Personal Infromation</a></li>
-                <li class="appmenu"><a href="needEducation.php">Education Information</a></li>
+                <li class="appmenu"><a href="#">Instruction</a></li>
+                <li class="appmenu"><a href="#">Personal Infromation</a></li>
+                <li class="appmenu"><a href="#">Education Information</a></li>
                 <li class="appmenu"><a class="active" href="needFinancial.php">Financial Information</a></li>
-                <li class="appmenu"><a href="needDocument.php">Document</a></li>
-                <li class="appmenu"><a href="needReview.php">Review & Submit</a></li>
+                <li class="appmenu"><a href="#">Document</a></li>
+                <li class="appmenu"><a href="#">Review & Submit</a></li>
             </ul>
         </div>
 
-        <form action="noaction.php" class="myform">
+        <form action="applicantClass.php" method="post" class="myform">
             <h3 class="bodyHeadings" id="finfo">Financial Information</h3>
             <p id="fDesc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, laborum, omnis vitae
                 eos nam recusandae quos maiores dolore quasi officia pariatur aspernatur? Vel iusto, totam aspernatur
@@ -101,7 +102,7 @@ if(isset($_SESSION["applyNowSch"])){
             <hr>
             <label for="income">Father/Guardian Income</label>
             <input onchange="sumIncome()" type="number" name="income" id="income" min="1000" pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==8) return false;" required placeholder="e.g. 35000">
+                onKeyPress="if(this.value.length==6) return false;" required placeholder="e.g. 35000">
 
             <label for="occupation">Father/Guardian Occupation</label>
             <select name="occupation" id="occupation" required>
@@ -207,7 +208,14 @@ if(isset($_SESSION["applyNowSch"])){
                     <option value="72">- Not Applicable</option>
                 </optgroup>
             </select>
-
+            <br>
+            <label for="reserve" class="house">Reserve Quota</label>
+            <select name="reserveSeat" id="htype" required>
+                <option value="" selected="selected" disabled="disabled">-- select one --</option>
+                <option value="orphan">Orphan</option>
+                <option value="disabled">Disabled Person</option>
+                <option value="no">Not Applicable</option>
+            </select>
             <br>
             <label for="fee">Semester Fee</label>
             <input type="number" onchange="sumExpenses()" min="1000" name="sfee" pattern="/^-?\d+\.?\d*$/"
@@ -229,14 +237,14 @@ if(isset($_SESSION["applyNowSch"])){
             <br>
             <label for="Support" class="single">Monthly Income Support from other/any source</label>
             <input type="number" onchange="sumIncome()" name="support" min="0" id="support" pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==8) return false;" required placeholder="e.g. 15000">
+                onKeyPress="if(this.value.length==6) return false;" required placeholder="e.g. 15000">
             <br>
             <label for="prop" class="single">All property worth[House,Car,Land etc]</label>
             <input type="number" name="prop" pattern="/^-?\d+\.?\d*$/"
                 onKeyPress="if(this.value.length==9) return false;" min="0" id="prop" required placeholder="e.g. 555000000">
             <br>
             <label for="house" class="house">House Status</label>
-            <select onchange="validate()" name="house" id="house" required>
+            <select onchange="validate()" name="houseStatus" id="house" required>
                 <option oncanplay="validate()" value="" selected="selected" disabled="disabled">-- select one --
                 </option>
                 <option onchange="validate()" value="rent">Rented</option>
@@ -258,48 +266,66 @@ if(isset($_SESSION["applyNowSch"])){
 
             <label for="ubill">Monthly Utility Bill</label>
             <input onchange="sumExpenses()" type="number" pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==7) return false;" min="1000" name="ubill" id="ubill" required
+                onKeyPress="if(this.value.length==6) return false;" min="1000" name="ubill" id="ubill" required
                 placeholder="e.g. 14000">
 
             <label for="gbill">Average 6 month Gas Bill</label>
             <input onchange="sumExpenses()" pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==7) return false;" min="1000" type="number" name="gbill" id="gbill"
+                onKeyPress="if(this.value.length==6) return false;" min="1000" type="number" name="gbill" id="gbill"
                 required placeholder="e.g. 4000">
             <br>
             <label for="ebill" class="single">Average 6 month Electricity Bill</label>
             <input onchange="sumExpenses()" type="number" pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==7) return false;" min="1000" name="ebill" id="ebill" required
+                onKeyPress="if(this.value.length==6) return false;" min="1000" name="ebill" id="ebill" required
                 placeholder="e.g. 6000">
             <br>
             <label for="mbill" class="single">Monthly Medicine Expenditure</label>
             <input onchange="sumExpenses()" type="number" pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==7) return false;" min="0" name="mbill" id="mbill" required
+                onKeyPress="if(this.value.length==6) return false;" min="0" name="mbill" id="mbill" required
                 placeholder="e.g. 2000">
             <br>
             <label for="edbill" class="single">Fees of All Siblings (Not taking any Scholarhsip)</label>
             <input type="number" onchange="sumExpenses()" name="edbill" id="edbill" disabled pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==7) return false;" min="100" required placeholder="e.g. 5000">
+                onKeyPress="if(this.value.length==6) return false;" min="100" required placeholder="e.g. 5000">
             <br>
 
             <label for="miscbill" class="single">Other Miscellaneous Expenditure</label>
             <input onchange="sumExpenses()" type="number" pattern="/^-?\d+\.?\d*$/"
-                onKeyPress="if(this.value.length==7) return false;" min="0" name="misc" id="misc" required
+                onKeyPress="if(this.value.length==6) return false;" min="0" name="misc" id="misc" required
                 placeholder="e.g. 7000">
             <br>
 
             <label for="totIncome">Total Monthly Income</label>
-            <input type="number" name="totIncome" id="totIncome" disabled>
+            <input type="number" name="totIncome" id="totIncome" readonly>
             <label for="totExp">Total Monthly Expenditure</label>
-            <input type="number" name="totexp" id="totExp" disabled>
+            <input type="number" name="totexp" id="totExp" readonly>
             <center>
                 <div class="next">
                     <a href="needEducation.php" class="footbutton">Previous</a>
-                    <button value="submit" class="footbutton">Save</button>
-                    <a href="needDocument.php" class="footbutton">Next</a>
+                    <button value="submit" name="nFinancialBtn" class="footbutton">Save&Next</button>
                 </div>
             </center>
         </form>
     </div>
+
+    <footer>
+    <center>
+    <div class="qauFooter">
+    <?php
+      include("facadeClass.php");
+    $db = new DBFacade();
+    $getContact=$db->getFooter();
+?>
+
+        <h3 id="footername">Quaid-i-Azam University Islamabad, 45320, Pakistan.</h3>
+        <br>
+        <label for="contact">Tel : </label>
+        <input type="text" name="tel" id="tel" disabled value="<?php echo($getContact[0]) ?>">
+        <label for="Email">Email : </label>
+        <input type="email" name="email" id="em" disabled value="<?php echo($getContact[1]) ?>"">
+    </div>
+</center>
+    </footer>
 
     <script>
 
@@ -360,19 +386,6 @@ if(isset($_SESSION["applyNowSch"])){
             else {
                 totExp.value = ``
             }
-
-            // if (rent.length != 0) {
-            //     let i = parseInt(rent)
-            //     alert(i)
-            //     sum1 += i
-            // }
-
-            // if (edbill.length != 0) {
-            //     let j = parseInt(edbill)
-            //     sum1 += j
-            // }
-
-            // totExp.value = sum1
 
         }
 

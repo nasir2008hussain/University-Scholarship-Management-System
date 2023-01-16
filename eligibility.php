@@ -27,8 +27,6 @@ if(isset($_SESSION["applyNowSch"])){
                     }
                     
                 }
-
-
 ?>
 <?php } ?>
 <?php } ?>
