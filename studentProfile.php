@@ -258,15 +258,15 @@ if(isset($_SESSION["myUsername"])){
             <ol type="1">
             <?php
             $db = new DBFacade();
-            $row=$db->getadScholarsipInfo();
+            $username = $_SESSION["myUsername"];
+            $row=$db->getadScholarsipInfoStudent($username);
             $count = sizeof($row);
             $i = 0;
             ?>
             <?php for ($i=0;$i<$count;$i++) { ?>
                 <form action="scholarshipClass.php" method="post">
                 <li> <input type="text" name="applySch" id="applyNowSch" readonly value="<?php echo($row[$i]); $i++;?>"> <input  style="color: red;" value="<?php echo($row[$i]); ?>" type="date" disabled class="lastDate"> <button class="apply" name="advertise" value="submit">Apply</button></li>
-                </form>
-                
+                </form>  
             <?php }  ?>
             </ol>
         </div>

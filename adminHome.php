@@ -152,7 +152,7 @@
                 <?php
                 include("facadeClass.php");
                   $db = new DBFacade();
-                  $row=$db->getadScholarsipInfo();
+                  $row=$db->getadScholarsipInfoAdmin();
                   $count = sizeof($row);
                   $i = 0;
                   ?>
@@ -161,7 +161,7 @@
                    <div class="boxes">
                     <p class="box1">
                         <label for="total">Number of Student Applied</label>
-                        <input type="number" name="applied" id="applied" readonly>
+                        <input type="number" name="applied" value="<?php echo($row[$i]); $i++;?>" id="applied" readonly>
                         <label for="date">Last Date</label>
                         <input type="date" name="lastDate" value="<?php echo($row[$i]); ?>" id="lastdate" readonly>
                     </p>

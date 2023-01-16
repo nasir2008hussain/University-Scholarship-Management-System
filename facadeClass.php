@@ -151,6 +151,56 @@ class DBFacade
       return $arrScholarship;
    }
 
+   function getadScholarsipInfoStudent($username1){
+      $username = $username1;
+      $curStatus = "submitted";
+   
+      $my_query1 = "SELECT scholarships.name,scholarships.lastDate FROM scholarships
+      WHERE scholarships.lastDate>=now() AND  scholarships.name 
+      NOT IN (
+         SELECT applicants.applicantScholarshipName FROM applicants
+         WHERE applicants.applicationStatus='$curStatus' AND applicants.applicantRegNo='$username'
+         
+         )" ; 
+
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      $i = 0;
+      $arrScholarship = array();
+      while ($row = mysqli_fetch_array($result1)) {
+         $Name = $row["name"];
+         $lastDate = $row["lastDate"];
+         $arrScholarship[$i] = ($Name);
+         $i++;
+         $arrScholarship[$i] = $lastDate;
+         $i++;
+      }
+      return $arrScholarship;
+
+      // $my_query1 = "SELECT scholarships.name,scholarships.lastDate FROM scholarships LEFT JOIN applicants ON scholarships.name=applicants.applicantScholarshipName WHERE 
+      // applicants.applicantID IS NOT NULL AND applicants.applicantRegNo='$username' AND scholarships.name != applicants.applicantScholarshipName";
+   }
+
+
+   function getadScholarsipInfoAdmin(){
+      $curStatus = "active";
+      $result = mysqli_query($this->connect(),"SELECT COUNT(*),scholarships.name,scholarships.lastDate FROM scholarships INNER JOIN applicants ON scholarships.name=applicants.applicantScholarshipName WHERE scholarships.currentStatus='$curStatus' AND applicants.applicantScholarshipName IS NOT NULL GROUP BY scholarships.name");
+   
+      $i = 0;
+      $arrScholarship = array();
+      while ($row = mysqli_fetch_array($result)) {
+         $Name = $row["name"];
+         $lastDate = $row["lastDate"];
+         $count = $row["COUNT(*)"];
+         $arrScholarship[$i] = ($Name);
+         $i++;
+         $arrScholarship[$i] = $count;
+         $i++;
+         $arrScholarship[$i] = $lastDate;
+         $i++;
+      }
+      return $arrScholarship;
+   }
+
    function getarchScholarsipInfo(){
       $my_query1 = "SELECT * FROM scholarships WHERE lastDate > DATE_SUB(now(), INTERVAL 3 MONTH) && lastDate < now()";
       $result1 = mysqli_query($this->connect(), $my_query1);

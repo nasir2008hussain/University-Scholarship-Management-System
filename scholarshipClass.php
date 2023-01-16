@@ -123,7 +123,6 @@ if($scholarship->getCategory()=="merit"){
       $merit = new merit($minCgpa,$interPercent,$domicile,$department,$program,$semester);
       $db = new DBFacade();
       $db->createMeritScholarship($merit,$scholarship);
-
 }
   } 
 ?>
