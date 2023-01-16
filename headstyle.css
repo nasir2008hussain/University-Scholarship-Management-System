@@ -1,0 +1,67 @@
+/* body{
+    margin: 0; height: 100%; overflow: hidden
+
+} */
+
+
+.myhead{
+    display: flex;
+    background-color: #05ca82;
+    height: 140px;
+    width: 101%;
+    margin: -10px -10px;
+    
+}
+
+#qaulogo{
+    height: 110px;
+    width: 110px;
+    border-radius: 50%;
+}
+#logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+}
+#qauname{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 15%;
+}
+
+#qauname p{
+    margin-top: -5px;
+    text-align: center;
+}
+
+form{
+    margin-left: 5px;
+}
+.bodyHeadings{
+    background-color: #04AA6D;
+    padding: 4px 4px;
+    color: white;
+}
+
+.log{
+    margin-top: 10px;
+    display: inline-block;
+}
+.log a{
+    border: 1px solid black;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-left: 250px;
+    padding: 5px 5px;
+    width: 150px;
+    color: white;
+    background-color: #04AA6D;
+}
+.log a:hover{
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}

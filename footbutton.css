@@ -1,0 +1,29 @@
+.footbutton {
+    
+    text-decoration: none;
+    border: 1px solid black;
+    color: black;
+    width: 120px;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: #04AA6D;
+    margin: 20px 5px;
+}
+
+.footbutton:hover {
+    background-color: #059c65;
+    color: white;
+    cursor: pointer;
+    font-size: medium;
+}
+
+.next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -35%;
+}
