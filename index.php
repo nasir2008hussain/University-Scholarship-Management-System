@@ -115,8 +115,7 @@
 
         <div id="qauname">
             <h2>QUAID-I-AZAM UNIVERSITY SCHOLARSHIP AID OFFICE</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quam pariatur fugit saepe unde
-                repellendus</p>
+            <p>Quaid-i-Azam University is an international seat of intellectual learning that illuminates the human minds</p>
         </div>
         <div class="log">
             <a id="login" href="Login.php">Login</a>
@@ -143,10 +142,9 @@
     <div class="content">
         <ol type="1">
         <?php
-            include("facadeClass.php");
-            $db = new DBFacade();
-         
-            $row=$db->getarchScholarsipInfo();
+            include("scholarshipClass.php");
+            $db = new scholarship();
+            $row = $db->getarchScholarsipInfo();
             $count = sizeof($row);
             if($count==0){
             echo ("No scholarship in this section");
@@ -166,9 +164,13 @@
     <div class="content">
         <ol type="1">
             <?php
-            $db = new DBFacade();
-            $row=$db->getadScholarsipInfo();
+            $db = new scholarship();
+            $row = $db->getadScholarsipInfo();
             $count = sizeof($row);
+            if($count==0){
+                echo ("No scholarship in this section");
+            }
+
             $i = 0;
             ?>
             <?php for ($i=0;$i<$count;$i++) { ?>

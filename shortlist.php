@@ -164,8 +164,7 @@
 
         <div id="qauname">
             <h2>QUAID-I-AZAM UNIVERSITY SCHOLARSHIP AID OFFICE</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quam pariatur fugit saepe unde
-                repellendus</p>
+            <p>Quaid-i-Azam University is an international seat of intellectual learning that illuminates the human minds</p>
         </div>
         <div class="log">
             <a id="login" href="Login.php">Logout</a>
@@ -216,7 +215,7 @@
             ?>
             <?php for ($i=0;$i<$count;$i++) { ?>
                 <form action="scholarshipClass.php" method="post">
-                <li> <input style="border: 0px solid black; width: 50%;"  type="text" name="applySch" id="applyNowSch" readonly value="<?php echo($row[$i]);?>"> <button class="apply" name="doShortlist" value="submit">Generate</button></li>
+                <li> <input style="border: 0px solid black; width: 50%;"  type="text" name="generateShortlist" id="applyNowSch" readonly value="<?php echo($row[$i]);?>"> <button class="apply" name="doShortlist" value="submit">Generate</button></li>
                 </form>
             <?php }  ?>
             </ol>

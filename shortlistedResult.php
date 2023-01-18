@@ -1,5 +1,11 @@
+<?php
+session_start();
+if(isset($_SESSION["generation"])){
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -8,6 +14,7 @@
     <link rel="stylesheet" href="headstyle.css">
     <link rel="stylesheet" href="menustyle.css">
     <title>Scholarhsip Management System</title>
+    <link rel="stylesheet" href="footbutton.css">
     <style>
         /* ------------------------------- */
 
@@ -82,43 +89,85 @@
             margin-left: -2%;
         }
 
-        /* ------------------------------------- */
-        .lastDate {
-            float: right;
-            margin-right: 10px;
-            background-color: #18ca89;
-            border: 0.5px solid black;
-            border-radius: 3px;
-            padding: 2px 2px;
-            width: 80px;
-        }
-        .lastDate:hover{
-            cursor: pointer;
-            color: white;
-            
-        }
-        #d1{
-            background-color: white;
-            width: 160px;
-            padding: 1px 1px;
-        }
-        #d1:hover{
-            cursor: pointer;
-            color: black;
-            
-        }
-        .adList{
+
+
+        /* ----------------------- */
+        .adSch{
+            margin: 15px 0px;
             height: 25px;
-            align-items: center;
+            font-size: medium;
+        
+            /* justify-content: center; */
+           
         }
-        /* ------------------- */
-        .schName{
-            color: black;
-            border: 1px solid #18ca89;
-            width: 50%;
+        .view{
+            float: right;
+            background-color: #18ca89;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: medium;
+            padding: 1px 1px;
+            width: 50px;
+            text-align: center;
+        }
+        .view:hover{
+            color: white;
 
         }
-      
+        /* -------------------- */
+        label{
+            /* display: inline-block; */
+            width: 170px;
+            font-size: x-large;
+        }
+        #search{
+            height: 35px;
+            width: 300px;
+            border-radius: 5px;
+            margin: 0px 15px;
+        }
+        #searchBtn{
+            height: 35px;
+            width: 100px;
+            border-radius: 5px;
+            background-color: #18ca89;
+            font-size: medium;
+        }
+        #searchBtn:hover{
+            cursor: pointer;
+            color: white;
+        }
+        .apply {
+            float: right;
+            background-color: #05ca82;
+            border: 1px solid #059c65;
+            border-radius: 2px;
+            color: white;
+            width: 75px;
+            text-align: center;
+            margin-right: 5px;
+            text-decoration: none;
+            padding: 0.5px 0.5px;
+            font-size: medium;
+        }
+
+        .apply:hover {
+            cursor: pointer;
+            background-color: black;
+            color: white;
+
+        }
+        table, th, td {
+  border: 2px solid #059c65;
+  border-collapse: collapse;
+}
+td,th{
+    text-align: center;
+    padding: 5px 3px;
+}
+
+
+
 
     </style>
 </head>
@@ -152,43 +201,85 @@
             <ul>
                 <li class="appmenu"><a href="adminHome.php">Home</a></li>
                 <li class="appmenu"><a href="createNew.php">Create New Scholarship</a></li>
-                <li class="appmenu"><a class="active" href="updateAd.php">Update Advertised Scholarship</a></li>
+                <li class="appmenu"><a href="updateAd.php">Update Advertised Scholarship</a></li>
                 <li class="appmenu"><a href="pubExSch.php">Publish Existing Scholarship</a></li>
-                <li class="appmenu"><a href="shortlist.php">View Shortlisted Candidates</a></li>
+                <li class="appmenu"><a  class="active" href="shortlist.php">View Shortlisted Candidates</a></li>
                 <li class="appmenu"><a href="viewPrevious.html">View Previous Scholarhsip</a></li>
                 <li class="appmenu"><a href="stdRecord.html">View Student Record</a></li>
                 <li class="appmenu"><a href="contact.php">Update Contact Details</a></li>
             </ul>
         </div>
         <div class="currSch">
-
-            <h3 class="headingsAdmin">Advertised Scholarhsip</h3>
+            <h3 class="headingsAdmin">Generated Shortlist Result</h3>
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum ab quas illum odio qui repellat,
                 consectetur neque at? Tenetur officiis ipsam libero sed minima mollitia commodi enim, saepe dolorum
                 nulla obcaecati
             </p>
-
-                <ol type="1">
-                    <?php
-                    include("facadeClass.php");
-                    $db = new DBFacade();
-                    $row=$db->getadScholarsipInfo();
-                    $count = sizeof($row);
-                    $i = 0;
-                    ?>
-                    <?php for ($i=0;$i<$count;$i++) { ?>
-                        <li class="adLit">
-                        <form action="scholarshipClass.php" method="post">
-                        <input class="schName" readonly value="<?php echo($row[$i]); $i++;?>" name="schName">
-                        <button class="lastDate" name="updateAdBtn" >SAVE</button> 
-                         <input value="<?php echo($row[$i]); ?>" min="<?php echo($row[$i]); ?>" name="lastDate"  type="date" class="lastDate" id="d1" >
-                        </form>
+            <ol>
+                <?php
+                include("facadeClass.php");
+                $db = new DBFacade();
+                $name = $_SESSION["generation"];
+                $row = $db->generateShortlistNow($name);
+                error_reporting(E_ERROR | E_PARSE);
+                
+            $count = sizeof($row);
+            if($count==0){
+            echo ("No one is shortlisted");
+            }
+            $i = 0;
+            ?>
+            <table style="width: 100%; ">
+            <tr>
+                <th  colspan="7"><?php echo($name)?></th>
+            </tr>
+                <tr>
+                    <th>Registration No</th>
+                    <th>Name</td>
+                    <th>Father Name</th>
+                    <th>Contact No</th>
+                    <th>Department</th>
+                    <th>Program</th>
+                    <th>Semester</th>        
+                </tr>
+                <?php for ($i=0;$i<$count;$i++) { ?>
+                    <tr>
+                        <td><?php echo($row[$i]);$i++?></td>
+                        <td><?php echo($row[$i]);$i++?></td>
+                        <td><?php echo($row[$i]);$i++?></td>
+                        <td><?php echo($row[$i]);$i++?></td>
+                        <td><?php echo($row[$i]);$i++?></td>
+                        <td><?php echo($row[$i]);$i++?></td>
+                        <td><?php echo($row[$i]);?></td>
+                    </tr>
                     <?php }  ?>
-                        </li>
+            </table>
+            <center>
+    <form action="applicantClass.php" method="post">
+     <div class="next">
+     <input type="text" name="schName" id="" value="<?php echo($name)?>" style="visibility: hidden;">
+    <button style="width: 200px;" class="footbutton" value="submit" name="inform">INFORM STUDENTS</button>
+     </div>
 
-                </ol>
+    </form>
+
+    </center>
         </div>
+ 
+    </div>
+
+    
+ 
+
+
+
+
+
+
+
+
 </body>
 
 </html>
+<?php }?>

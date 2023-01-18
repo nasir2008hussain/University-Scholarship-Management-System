@@ -631,7 +631,7 @@ class DBFacade
    
   
       $my_query1 = "UPDATE students SET contactNo= '$contact', email = '$email', residentialAddress='$address', altContactNo='$altContact'  WHERE registration='$username'";
-      echo ("here, $username,$email,$contact,$address,$altContact ---");
+     
       $result1 = mysqli_query($this->connect(), $my_query1);
       if ($result1) {
          $ret = "1";
@@ -701,7 +701,7 @@ class DBFacade
       $saving1 = intval($saving);
       $prop1 = intval($prop);
 
-      echo (var_dump($transcript));
+     
 
       echo("$username,$schName,$income1,$exp1,$saving1,$prop1,$house,$reserve,$status");
 
@@ -777,6 +777,215 @@ transcripts,applicationStatus,reserved,totalIncome,totalExpenses,savedIncome,pro
       return $statusReport;
 
    }
+
+   // -------------generate shortlist--------------------------
+   function generateShortlistNow($name){
+      $schName = $name;
+      $my_query1 = "SELECT * FROM scholarships WHERE name='$schName'";
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      $Name = "";
+      $seat=0;
+      $sem = "";
+      $shortArray=array();
+      $i = 0;
+      $reg=0;
+      $todaydate = date("Y-m-d", time());  //<== DON'T FORGET THE 2ND ARGUMENT TO date(): TIME-STAMP. YOU MAY USE: time()
+      $sqlDate   = date('Y-m-d', strtotime($todaydate));
+      
+      while ($row = mysqli_fetch_array($result1)) {
+       
+         $Name = $row["category"];
+         $seat = $row["seat"];
+         $sem = $row["semester"];
+         
+      }
+
+
+      
+      if ($Name=="need") {
+      
+       $my_query2 = "SELECT students.* FROM students 
+      WHERE registration IN
+      (
+       SELECT applicants.applicantRegNo FROM applicants
+       WHERE applicants.applicantScholarshipName='$schName'
+       ORDER BY
+       CASE 
+       WHEN applicants.reserved='orphan' THEN 1
+       WHEN applicants.reserved='disabled' THEN 2
+       WHEN applicants.reserved='no' THEN 3
+       ELSE 4 END ASC,
+       CASE 
+       WHEN applicants.reserved='no' THEN 
+       applicants.totalIncome ASC, applicants.savedIncome DESC, applicants.propertyWorth ASC
+       ELSE 0 END
+      )";
+
+         $result2 = mysqli_query($this->connect(), $my_query2);
+         error_reporting(E_ERROR | E_PARSE);
+         while ($row2 = mysqli_fetch_array($result2)) {
+            $shortArray[$i] = $row2["registration"];
+            $i++;
+            $shortArray[$i] = $row2["name"];
+            $i++;
+            $shortArray[$i] = $row2["fatherName"];
+            $i++;
+            $shortArray[$i] = $row2["contactNo"];
+            $i++;
+            $dept = $row2["department"];
+            $my_query3 = "SELECT * FROM departments WHERE departmentId='$dept'";
+            $results3 = mysqli_query($this->connect(), $my_query3);
+            while ($row = mysqli_fetch_array($results3)) {
+               $shortArray[$i] = $row["departmentName"];
+            }
+
+            $i++;
+            $program = $row2["program"];
+            $my_query5 = "SELECT * FROM programs WHERE programId='$program'";
+            $results5 = mysqli_query($this->connect(), $my_query5);
+            while ($row = mysqli_fetch_array($results5)) {
+               $shortArray[$i] = $row["programName"];
+            }
+            $i++;
+            $shortArray[$i] = $row2["semester"];
+            $i++;
+         }
+     
+         return $shortArray;
+      }
+
+
+
+      if($Name=="merit"){
+         if ($sem != "1") 
+         {
+          $my_query2 = "SELECT students.* FROM students 
+          WHERE students.semester!='1' AND registration IN
+          (
+           SELECT applicants.applicantRegNo FROM applicants
+           WHERE applicants.applicantScholarshipName='$schName'
+          )
+          ORDER BY 
+           interMarksObt DESC, cgpa DESC , lastGpa DESC LIMIT $seat";
+         
+         $result2 = mysqli_query($this->connect(), $my_query2);
+
+         while ($row2 = mysqli_fetch_array($result2)) {
+               $reg = $row2["registration"];
+               $shortArray[$i] = $row2["registration"];
+               $i++;
+               $shortArray[$i] = $row2["name"];
+               $i++;
+               $shortArray[$i]=$row2["fatherName"];
+               $i++;
+               $shortArray[$i] = $row2["contactNo"];
+               $i++;
+               $dept = $row2["department"];
+               $my_query3 = "SELECT * FROM departments WHERE departmentId='$dept'";
+               $results3 = mysqli_query($this->connect(), $my_query3);
+               while ($row = mysqli_fetch_array($results3)) {
+                  $shortArray[$i]  = $row["departmentName"];
+               }
+   
+               $i++;
+               $program = $row2["program"];
+               $my_query5 = "SELECT * FROM programs WHERE programId='$program'";
+               $results5 = mysqli_query($this->connect(), $my_query5);
+               while ($row = mysqli_fetch_array($results5)) {
+                  $shortArray[$i] = $row["programName"];
+               }
+
+               $i++;
+               $shortArray[$i] = $row2["semester"];
+               $i++;
+               $shortQuery="UPDATE applicants SET applicants.applicationStatus='selected', applicants.availingDate='$sqlDate' 
+               WHERE applicants.applicantScholarshipName='$schName'
+               AND applicants.applicantRegNo='$reg' AND applicants.availingDate is null";
+               mysqli_query($this->connect(), $shortQuery);
+         }
+            return $shortArray;
+
+         }
+         if($sem == "1"){
+            $my_query2 = "SELECT students.* FROM students 
+            WHERE registration IN
+            (
+             SELECT applicants.applicantRegNo FROM applicants
+             WHERE applicants.applicantScholarshipName='$schName'
+            )
+            ORDER BY 
+             interMarkObt DESC LIMIT $seat";
+           //   -query to fetch
+           $result2 = mysqli_query($this->connect(), $my_query2);
+  
+           while ($row2 = mysqli_fetch_array($result2)) {
+                 $shortArray[$i] = $row2["registration"];
+                 $i++;
+                 $shortArray[$i] = $row2["name"];
+                 $i++;
+                 $shortArray[$i]=$row2["fatherName"];
+                 $i++;
+                 $shortArray[$i] = $row2["contactNo"];
+                 $i++;
+                 $dept = $row2["department"];
+                 $my_query3 = "SELECT * FROM departments WHERE departmentId='$dept'";
+                 $results3 = mysqli_query($this->connect(), $my_query3);
+                 while ($row = mysqli_fetch_array($results3)) {
+                    $shortArray[$i]  = $row["departmentName"];
+                 }
+     
+                 $i++;
+                 $program = $row2["program"];
+                 $my_query5 = "SELECT * FROM programs WHERE programId='$program'";
+                 $results5 = mysqli_query($this->connect(), $my_query5);
+                 while ($row = mysqli_fetch_array($results5)) {
+                    $shortArray[$i] = $row["programName"];
+                 }
+  
+                 $i++;
+                 $shortArray[$i] = $row2["semester"];
+               $i++;
+             
+
+           }
+
+
+              return $shortArray;
+
+         }
+
+   }
+
+   // -----------------inform student for shortlisted-----------------------------
+
+   }
+
+   function getApplicationSuccess($username){
+      $status = "selected";
+      $my_query1 = "SELECT * FROM applicants WHERE applicantRegNo='$username' AND  applicationStatus='$status'";
+      $result1 = mysqli_query($this->connect(), $my_query1);
+      $i = 0;
+      $statusReport = array();
+      while ($row = mysqli_fetch_array($result1)) {
+         $Name = $row["applicantScholarshipName"];
+         $start=$row["availingDate"];
+         $statusReport[$i] = ($Name);
+         $i++;
+         $statusReport[$i] = $start;
+         $i++;
+      }
+      return $statusReport;
+
+   }
+
+
+   
+function informStudent($schName){
+      $deactiveSch = $schName;
+      $my_query2 = "UPDATE applicants SET applicants.applicationStatus='rejected' WHERE applicationStatus='submitted' AND applicants.applicantScholarshipName='$schName'";
+      $result1 = mysqli_query($this->connect(), $my_query2);
+      return $result1;
+}
 
 }
 ?>

@@ -1,10 +1,4 @@
-<?php
-session_start();
-if (isset($_SESSION["myUsername"])) {
-?>
-<?php
-if(isset($_SESSION["applyNowSch"])){
-?>
+
 <?php
      include("facadeClass.php");
 
@@ -146,6 +140,18 @@ if(isset($_SESSION["applyNowSch"])){
                 }
                 
 ?>
+
+
+<?php
+session_start();
+if (isset($_SESSION["myUsername"])) {
+?>
+<?php
+if(isset($_SESSION["applyNowSch"])){
+?>
+
+<?php } ?>
+<?php } ?>
 
 <!------------------------------ merit ----------------------- -->
 
@@ -320,13 +326,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['nFinalBtn'])){
 <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['viewStatus'])) {
         $scholarshipName = $_POST['applySchStatus'];
-        session_start();
         $_SESSION["forStatus"] = "$scholarshipName";
         header('location: status.php');
      }
+?>
 
-
-
+<?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inform'])) {
+        $resultSch= $_POST['schName'];
+        $db=new DBFacade();
+        $id=$db->informStudent($resultSch);
+        if($id){
+        header("location:adminHome.php");
+        }
+        else{
+        echo ("not inform successfully!");
+        }
+     }
 ?>
 
 
@@ -337,5 +353,3 @@ if($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['nFinalBtn'])){
 
 
 
-<?php } ?>
-<?php } ?>

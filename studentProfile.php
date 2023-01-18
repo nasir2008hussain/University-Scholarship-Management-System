@@ -227,9 +227,32 @@ if(isset($_SESSION["myUsername"])){
             </div>
         </div>
         <hr>
-        
+      
+        <button class="collapsible">AVAILING SCHOLARSHIP</button>
+        <div class="content">
+            <ol type="1">
+<?php
+            $db = new DBFacade();
+            $username=  $_SESSION["myUsername"];
+        $row = $db->getApplicationSuccess($username);
+            $count = sizeof($row);
+            if($count==0){
+            echo ("You are not availing any scholarhsips");
+            }
+            $i = 0;
+            ?>
+             <?php for ($i=0;$i<$count;$i++) { ?>
+              
+                <li> <input type="text" name="applySchStatus" id="applyNowSch" readonly value="<?php echo($row[$i]);$i++?>"> <input  style="color: green;" value="<?php echo($row[$i]); ?>" type="date" disabled class="lastDate"></li>
+            
+                
+            <?php }  ?>
+            </ol>
+            </ol>
+        </div>
 
         <button class="collapsible">Current Scholarship Status</button>
+        <p>Any scholarhsips you had applied not showing here means it is rejected</p>
         <div class="content">
             <ol type="1">
 <?php
@@ -238,7 +261,7 @@ if(isset($_SESSION["myUsername"])){
             $row=$db->getApplicationStatus($username);
             $count = sizeof($row);
             if($count==0){
-            echo ("No application is in processing, start applying Now.");
+            echo ("No application is in processing, start applying Now");
             }
             $i = 0;
             ?>

@@ -13,7 +13,7 @@ class scholarship {
     private $category;
 
 
-  function __construct($name,$seat,$stipend,$lastDate, $publishDate,$category) {
+  function __construct($name=0,$seat=0,$stipend=0,$lastDate=0, $publishDate=0,$category=0) {
 
     $this->category = $category;
     $this->name = $name;
@@ -41,6 +41,17 @@ class scholarship {
   function getCategory(){
     return $this->category;
   }
+  public function getarchScholarsipInfo(){
+    $db = new DBFacade();
+    $row = $db->getarchScholarsipInfo();
+    return $row;
+  }
+
+  public function getadScholarsipInfo(){
+    $db = new DBFacade();
+    $row = $db->getadScholarsipInfo();
+    return $row;
+  }
 
 }
 
@@ -61,6 +72,7 @@ class merit extends scholarship{
     $this->semester = $semester;
     $this->program = $program;
   }
+
 
   public function getCgpa(){
     return $this->cgpa;
@@ -200,6 +212,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['existAdBtn'])) {
   $db = new DBFacade();
   $db->publishExistsScholarship($sname, $lastDate, $publishDate);
 }
+
+// ---------------------------------------generating shortlist of active scholarhsip--------------
+
+if ($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['doShortlist'])) {
+ 
+  $sname = $_POST['generateShortlist'];
+  session_start();
+  $_SESSION["generation"] = "$sname";
+ header('location: shortlistedResult');
+}
+
 
 
 ?>

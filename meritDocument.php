@@ -64,8 +64,7 @@ if(isset($_SESSION["applyNowSch"])){
 
         <div id="qauname">
             <h2>QUAID-I-AZAM UNIVERSITY SCHOLARSHIP AID OFFICE</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quam pariatur fugit saepe unde
-                repellendus</p>
+            <p>Quaid-i-Azam University is an international seat of intellectual learning that illuminates the human minds</p>
         </div>
         <div class="log">
             <a id="login" href="studentProfile.php">HOME</a>

@@ -199,8 +199,6 @@ if(isset($_SESSION["forStatus"])){
             $count = sizeof($row);
             $i = 0;
             ?>
-
-
             <div class="status">
                 <p id="report">Your application with Tracking ID <h3 id="trackingID"><?php echo("$row[2]")?></h3> is <h3 id="final"><?php echo("$row[3]")?></h3>successfully! Lorem ipsum dolor sit amet.</p>
             </div>
